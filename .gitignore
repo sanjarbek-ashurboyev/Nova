@@ -1,0 +1,35 @@
+# Maxfiy kalitlar va sozlamalar / Secrets and local settings
+.secret_key
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Django
+*.sqlite3
+db.sqlite3.bak-*
+/staticfiles/
+
+# Uploaded media — real user uploads never get committed.
+# demo/ is the exception: small placeholder images shipped for `seed_demo`.
+/media/*
+!/media/demo/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs / coverage
+*.log
+.coverage
+htmlcov/

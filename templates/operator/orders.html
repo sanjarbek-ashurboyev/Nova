@@ -1,0 +1,192 @@
+{% extends 'base/operator_base.html' %}
+{% load humanize %}
+
+{% block title %}Buyurtmalar{% endblock %}
+
+{% block page_title %}Buyurtmalar navbati{% endblock %}
+{% block page_subtitle %}Mijoz bilan bog'lanib, buyurtmani tasdiqlang{% endblock %}
+
+{% block sidebar %}{% include 'operator/includes/sidebar.html' with active='orders' %}{% endblock %}
+
+{% block operator_content %}
+    <!-- ---------- Buyurtmalar jadvali ---------- -->
+    <section class="op-card" data-op-table data-op-per-page="8">
+
+        <div class="op-toolbar">
+            <div class="op-search">
+                <svg><use href="#i-search"/></svg>
+                <input type="search" placeholder="Mijoz ismi, telefon yoki buyurtma raqami..."
+                       data-op-search aria-label="Qidirish">
+                <kbd>/</kbd>
+            </div>
+
+{#            <select class="op-select" data-op-filter="region" aria-label="Viloyat">#}
+{#                <option value="all">Barcha viloyatlar</option>#}
+{#                <option>Toshkent</option>#}
+{#                <option>Samarqand</option>#}
+{#                <option>Farg'ona</option>#}
+{#                <option>Andijon</option>#}
+{#                <option>Buxoro</option>#}
+{#                <option>Namangan</option>#}
+{#            </select>#}
+
+{#            <select class="op-select" data-op-filter="period" aria-label="Muddat">#}
+{#                <option value="all">Barcha vaqt</option>#}
+{#                <option value="today">Bugun</option>#}
+{#                <option value="week">Shu hafta</option>#}
+{#                <option value="month">Shu oy</option>#}
+{#            </select>#}
+
+            <button type="button" class="btn btn-ghost btn-sm">
+                <svg><use href="#i-refresh"/></svg>
+                Yangilash
+            </button>
+{#            <button type="button" class="btn btn-ghost btn-sm">#}
+{#                <svg><use href="#i-download"/></svg>#}
+{#                Excel#}
+{#            </button>#}
+        </div>
+
+        <div class="op-tabs">
+            <button type="button" class="op-tab is-active" data-op-tab="all">Hammasi <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="new">Yangi <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="packaging">Qadoqlash <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="shipping">Yetkazilmoqda <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="delivered">Yetkazildi <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="pickup_later">Keyin oladi <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="hold">Hold <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="returned">Qaytib keldi <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="cancelled">Bekor qilindi <i>0</i></button>
+            <button type="button" class="op-tab" data-op-tab="archive">Arxiv <i>0</i></button>
+        </div>
+
+        <div class="op-table-wrap">
+            <table class="op-table">
+                <thead>
+                <tr>
+                    <th data-sort="num">ID</th>
+                    <th data-sort="date">Sana</th>
+                    <th data-sort="text">Mijoz</th>
+                    <th data-sort="text">Mahsulot</th>
+                    <th data-sort="text">Oqim</th>
+                    <th data-sort="text">Viloyat</th>
+                    <th data-sort="num">Soni</th>
+                    <th data-sort="num">Summa</th>
+                    <th data-sort="text">Holati</th>
+                    <th>Amallar</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for order in orders %}
+                	<tr data-status="{{ order.status }}" data-region="{{ order.district.region.id|default_if_none:'' }}"
+                    data-href="{% url 'operator:order-detail' order.id %}" data-search="{{ order.phone }}">
+                    <td class="cell-id" data-value="{{ order.id }}">#{{ order.id }}</td>
+                    <td class="cell-muted num" data-value="{{ order.created_at|date:'YmdHis' }}"
+                        title="{{ order.created_at|date:'d.m.Y H:i:s' }}">
+                        {{ order.created_at|date:"d.m.Y H:i" }}
+                    </td>
+                    <td>
+                        <span class="cell-strong">{{ order.customer_name }}</span>
+                        <span class="cell-sub num">{{ order.phone }}</span>
+                    </td>
+                    <td><span class="cell-clip" title="{{ order.product.name }}">{{ order.product.name }}</span></td>
+                    <td><span class="cell-clip" title="{{ order.thread.name }}">{{ order.thread.name }}</span></td>
+                    <td>{{ order.district.region.title }}</td>
+                    <td class="num">{{ order.quantity }}</td>
+                    <td class="num cell-strong" data-value="{{ order.total_price }}">{{ order.total_price|intcomma }}</td>
+                    <td><span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+                    <td>
+                        <div class="cell-actions">
+                            <a class="btn btn-primary btn-sm" href="{% url 'operator:order-detail' order.id %}">
+                                <svg><use href="#i-phone"/></svg>
+                                Qo'ng'iroq
+                            </a>
+                            <button type="button" class="btn btn-ghost btn-sm btn-icon"
+                                    data-op-modal-open="#statusModal"
+                                    data-action="{% url 'operator:change-status' order.id %}"
+                                    data-fill-id="#{{ order.id }}" data-fill-customer="{{ order.customer_name }}"
+                                    data-fill-status="{{ order.status }}"
+                                    aria-label="Holatni o'zgartirish">
+                                <svg><use href="#i-edit"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+
+                <!-- Filtrga hech narsa mos kelmaganda ko'rinadi -->
+                <tr class="op-no-result">
+                    <td colspan="10" class="op-empty">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.7" y2="16.7"/>
+                        </svg>
+                        <strong>Hech narsa topilmadi</strong>
+                        Qidiruv so'zini yoki filtrlarni o'zgartirib ko'ring
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="op-pagination">
+            <span class="op-pagination-info" data-op-page-info></span>
+            <div class="op-pages" data-op-pages></div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block operator_modals %}
+<!-- ====================== TEZ HOLAT O'ZGARTIRISH OYNASI ====================== -->
+<div class="op-modal" id="statusModal" role="dialog" aria-modal="true" aria-labelledby="statusModalTitle">
+    <div class="op-modal-box">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="op-modal-head">
+                <span class="op-card-icon"><svg><use href="#i-edit"/></svg></span>
+                <div>
+                    <h3 id="statusModalTitle">Holatni o'zgartirish</h3>
+                    <p class="op-card-sub">
+                        <span data-op-fill="id">#0000</span> &middot;
+                        <span data-op-fill="customer">Mijoz</span>
+                    </p>
+                </div>
+                <button type="button" class="op-modal-close" data-op-modal-close aria-label="Yopish">&times;</button>
+            </div>
+
+            <div class="op-modal-body">
+                <div class="op-field">
+                    <label for="quickStatus">Yangi holat</label>
+                    <select class="op-field-select" id="quickStatus" name="status" data-op-fill="status">
+                        <option value="new">Yangi</option>
+                        <option value="packaging">Qadoqlash</option>
+                        <option value="shipping">Yetkazilmoqda</option>
+                        <option value="delivered">Yetkazildi</option>
+                        <option value="pickup_later">Keyin oladi</option>
+                        <option value="returned">Qaytib keldi</option>
+                        <option value="cancelled">Bekor qilindi</option>
+                        <option value="hold">Hold</option>
+                        <option value="archive">Arxiv</option>
+                    </select>
+                </div>
+
+                <div class="op-field op-mt-0">
+                    <label for="quickComment">Izoh</label>
+                    <textarea class="op-textarea" id="quickComment" name="comment" maxlength="500"
+                              placeholder="Mijoz bilan suhbat natijasi..."></textarea>
+                    <p class="op-hint">Izoh so'rovnomaga yoziladi va sotuvchi kabinetida ko'rinadi.</p>
+                </div>
+            </div>
+
+            <div class="op-modal-foot">
+                <button type="button" class="btn btn-ghost" data-op-modal-close>Bekor qilish</button>
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

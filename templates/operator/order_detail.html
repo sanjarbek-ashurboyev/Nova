@@ -1,0 +1,435 @@
+{% extends 'base/operator_base.html' %}
+{% load humanize %}
+
+{% comment %}
+   Operator paneli - Buyurtma kartasi va so'rovnoma formasi (statik ko'rinish)
+   Operatorning asosiy ish sahifasi: mijozga qo'ng'iroq qiladi, buyurtmani
+   aniqlashtiradi, holatni belgilaydi va izoh (Survey.comment) yozadi.
+{% endcomment %}
+
+{% block title %}Buyurtma #{{ order.id }}{% endblock %}
+
+{% block page_title %}Buyurtma kartasi{% endblock %}
+{% block page_subtitle %}Mijoz bilan gaplashib, ma'lumotlarni tasdiqlang{% endblock %}
+
+{% block sidebar %}{% include 'operator/includes/sidebar.html' with active='orders' %}{% endblock %}
+
+{% block operator_content %}
+    <a href="{% url 'operator:my-orders' %}" class="op-back">
+        <svg><use href="#i-arrow-left"/></svg>
+        Navbatga qaytish
+    </a>
+
+    <div class="op-detail-head">
+        <h2>Buyurtma #{{ order.id }}</h2>
+        <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+        <span class="op-meta">{{ order.created_at|date:"d.m.Y H:i" }} da qabul qilingan</span>
+
+{#        <div class="op-card-head-actions">#}
+{#            <button type="button" class="btn btn-ghost btn-sm">#}
+{#                <svg><use href="#i-skip"/></svg>#}
+{#                Keyingi buyurtma#}
+{#            </button>#}
+{#        </div>#}
+    </div>
+
+    <!-- ---------- Qo'ng'iroq bloki ---------- -->
+    <div class="op-call">
+        <div class="op-call-inner">
+            <div class="op-call-who">
+                <div class="op-call-label">Mijoz</div>
+                <h3>{{ order.customer_name }}</h3>
+                <a class="op-call-phone" href="tel:{{ order.phone }}">
+                    <svg><use href="#i-phone"/></svg>
+                    {{ order.phone }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="op-detail" style="margin-top:20px">
+
+        <!-- ================= CHAP USTUN ================= -->
+        <div class="op-detail-col">
+
+            <!-- ---------- Mahsulot va narx ---------- -->
+            <section class="op-card">
+                <div class="op-card-head">
+                    <span class="op-card-icon"><svg><use href="#i-box"/></svg></span>
+                    <div>
+                        <h3>Mahsulot</h3>
+                        <p class="op-card-sub">Miqdorni mijoz bilan tasdiqlang</p>
+                    </div>
+                </div>
+
+                <div class="op-card-body">
+                    <div class="op-product">
+                        <div class="op-product-img">
+                            <img src="{{ order.product.thumbnail.image.url }}" alt="">
+                            <svg><use href="#i-image"/></svg>
+                        </div>
+
+                        <div class="op-product-info">
+                            <h4>{{ order.product.name }}</h4>
+                            <p class="op-meta">{{ order.product.category.name }} &middot; Omborda {{ order.product.stock }} dona</p>
+
+                            <div class="op-qty" data-op-qty data-price="{{ order.product.price }}" data-discount="{{ order.thread.discount }}"
+                                 data-delivery="0">
+                                <button type="button" data-op-qty-minus aria-label="Kamaytirish">&minus;</button>
+                                <input type="number" name="quantity" form="orderForm" value="{{ form.quantity.value|default_if_none:'' }}"
+                                       min="1" max="24" aria-label="Miqdori">
+                                <button type="button" data-op-qty-plus aria-label="Ko'paytirish">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Narx hisobi: (mahsulot narxi - oqim chegirmasi) * miqdor -->
+                    <div class="op-price-rows">
+                        <div class="op-price-row">
+                            <span>Mahsulot narxi</span>
+                            <span class="num" data-op-price="subtotal">{{ order.product.price }} so'm</span>
+                        </div>
+                        <div class="op-price-row">
+                            <span>Oqim chegirmasi</span>
+                            <span class="num is-minus">&minus;&nbsp;<span data-op-price="discount">{{ order.thread.discount }} so'm</span></span>
+                        </div>
+                        <div class="op-price-row">
+                            <span>Yetkazib berish</span>
+                            <span class="num">Bepul</span>
+                        </div>
+                        <div class="op-price-row">
+                            <span>Miqdori</span>
+                            <span class="num" data-op-price="qty">{{ order.quantity }} dona</span>
+                        </div>
+                        <div class="op-price-row is-total">
+                            <span>Jami to'lov</span>
+                            <span class="num" data-op-price="total">{{ order.total_price }} so'm</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------- Yetkazib berish ---------- -->
+            <section class="op-card">
+                <div class="op-card-head">
+                    <span class="op-card-icon"><svg><use href="#i-map"/></svg></span>
+                    <div>
+                        <h3>Yetkazib berish</h3>
+                        <p class="op-card-sub">Manzilni mijozdan aniqlab oling</p>
+                    </div>
+                </div>
+
+                <div class="op-card-body">
+                    <div class="op-grid-2">
+                        <div class="op-field">
+                            <label for="customerName">Mijoz ismi</label>
+                            <input class="op-input" type="text" id="customerName" name="customer_name" form="orderForm"
+                                   value="{{ form.customer_name.value|default_if_none:'' }}">
+                        </div>
+
+                        <div class="op-field">
+                            <label for="customerPhone">Telefon</label>
+                            <input class="op-input num" type="tel" id="customerPhone" name="phone" form="orderForm"
+                                   value="{{ form.phone.value|default_if_none:'' }}">
+                        </div>
+
+                        <div class="op-field">
+                            <label for="regionSelect">Viloyat</label>
+                            <select class="op-field-select" id="regionSelect" name="region" data-op-region>
+                                <option value="">Viloyatni tanlang</option>
+                                {% for region in regions %}
+                                	<option {% if order.district.region_id == region.id %} selected {% endif %}
+                                            value="{{ region.id }}">{{ region.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="op-field">
+                            <label for="districtSelect">Tuman</label>
+                            <select class="op-field-select" id="districtSelect" name="district" form="orderForm"
+                                    data-op-district data-selected="{{ order.district_id|default_if_none:'' }}">
+                                <option value="">Tumanni tanlang</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="op-field">
+                        <label for="address">Manzil</label>
+                        <textarea class="op-textarea" id="address" name="address" form="orderForm"
+                                  style="min-height:80px" required
+                                  placeholder="Ko'cha, uy, mo'ljal...">{{ form.address.value|default_if_none:order.address|default_if_none:'' }}</textarea>
+                    </div>
+
+                    <div class="op-grid-2">
+{#                        <div class="op-field">#}
+{#                            <label for="deliveryDate">Yetkazish sanasi</label>#}
+{#                            <input class="op-input" type="date" id="deliveryDate" name="delivery_date"#}
+{#                                   value="2026-08-19">#}
+{#                        </div>#}
+{##}
+{#                        <div class="op-field">#}
+{#                            <label for="deliveryTime">Qulay vaqt</label>#}
+{#                            <select class="op-field-select" id="deliveryTime" name="delivery_time">#}
+{#                                <option>Ertalab (09:00 - 12:00)</option>#}
+{#                                <option selected>Kunduzi (12:00 - 17:00)</option>#}
+{#                                <option>Kechqurun (17:00 - 20:00)</option>#}
+{#                            </select>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------- Holatlar tarixi ---------- -->
+{#            <section class="op-card">#}
+{#                <div class="op-card-head">#}
+{#                    <span class="op-card-icon"><svg><use href="#i-history"/></svg></span>#}
+{#                    <div>#}
+{#                        <h3>Holatlar tarixi</h3>#}
+{#                        <p class="op-card-sub">Buyurtma bo'yicha barcha o'zgarishlar</p>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="op-card-body">#}
+{#                    <div class="op-timeline">#}
+{#                        <div class="op-timeline-item is-done">#}
+{#                            <div class="op-timeline-title">Yangi buyurtma qabul qilindi</div>#}
+{#                            <div class="op-timeline-meta">17.08.2026 14:30 &middot; Sayt orqali</div>#}
+{#                            <div class="op-timeline-note">#}
+{#                                Oqim: <b>Fitnes bilaguzuk</b> &middot; Sotuvchi: Otabek Sobirov (+998 90 900 11 22)#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <div class="op-timeline-item is-done">#}
+{#                            <div class="op-timeline-title">Operatorga biriktirildi</div>#}
+{#                            <div class="op-timeline-meta">17.08.2026 14:32 &middot; Dilnoza Karimova</div>#}
+{#                        </div>#}
+{##}
+{#                        <div class="op-timeline-item is-current">#}
+{#                            <div class="op-timeline-title">Qo'ng'iroq kutilmoqda</div>#}
+{#                            <div class="op-timeline-meta">Hozirgi bosqich</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </section>#}
+
+            <!-- ---------- Mijozning oldingi buyurtmalari ---------- -->
+            <section class="op-card">
+                <div class="op-card-head">
+                    <span class="op-card-icon"><svg><use href="#i-user"/></svg></span>
+                    <div>
+                        <h3>Shu mijozning oldingi buyurtmalari</h3>
+                        <p class="op-card-sub">Bir xil telefon raqami bo'yicha</p>
+                    </div>
+                </div>
+
+                <div class="op-table-wrap">
+                    <table class="op-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sana</th>
+                            <th>Mahsulot</th>
+                            <th>Summa</th>
+                            <th>Holati</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for customer_order in current_customer_orders %}
+                        	<tr>
+                            <td class="cell-id">#{{ customer_order.id }}</td>
+                            <td class="cell-muted num">{{ customer_order.created_at|date:"d.m.Y H:i" }}</td>
+                            <td>{{ customer_order.product.name }}</td>
+                            <td class="num cell-strong">{{ customer_order.total_price|intcomma }}</td>
+                            <td><span class="status-badge status-{{ customer_order.status }}">{{ customer_order.get_status_display }}</span></td>
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= O'NG USTUN: SO'ROVNOMA ================= -->
+        <div class="op-detail-col op-detail-col--side">
+            <section class="op-card">
+                <div class="op-card-head">
+                    <span class="op-card-icon"><svg><use href="#i-clipboard"/></svg></span>
+                    <div>
+                        <h3>So'rovnoma</h3>
+                        <p class="op-card-sub">Suhbat natijasini belgilang</p>
+                    </div>
+                </div>
+
+                <form class="op-card-body" id="orderForm" method="post">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div class="op-errors" role="alert">
+                            <svg><use href="#i-info"/></svg>
+                            <div>
+                                <b>Saqlanmadi - quyidagilarni to'g'rilang:</b>
+                                <ul>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li><b>{{ field.label }}:</b> {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="op-field">
+                        <label>Buyurtma holati</label>
+                        <div class="op-status-grid">
+                            <label class="op-status-opt s-packaging">
+                                <input type="radio" name="status" value="packaging"
+                                       {% if form.status.value == "packaging" %}checked{% endif %}>
+                                <span>Qadoqlash</span>
+                            </label>
+                            <label class="op-status-opt s-shipping">
+                                <input type="radio" name="status" value="shipping"
+                                       {% if form.status.value == "shipping" %}checked{% endif %}>
+                                <span>Yetkazish</span>
+                            </label>
+                            <label class="op-status-opt s-delivered">
+                                <input type="radio" name="status" value="delivered"
+                                       {% if form.status.value == "delivered" %}checked{% endif %}>
+                                <span>Yetkazildi</span>
+                            </label>
+                            <label class="op-status-opt s-pickup_later">
+                                <input type="radio" name="status" value="pickup_later"
+                                       {% if form.status.value == "pickup_later" %}checked{% endif %}>
+                                <span>Keyin oladi</span>
+                            </label>
+                            <label class="op-status-opt s-hold">
+                                <input type="radio" name="status" value="hold"
+                                       {% if form.status.value == "hold" %}checked{% endif %}>
+                                <span>Hold</span>
+                            </label>
+                            <label class="op-status-opt s-returned">
+                                <input type="radio" name="status" value="returned"
+                                       {% if form.status.value == "returned" %}checked{% endif %}>
+                                <span>Qaytdi</span>
+                            </label>
+                            <label class="op-status-opt s-cancelled">
+                                <input type="radio" name="status" value="cancelled"
+                                       {% if form.status.value == "cancelled" %}checked{% endif %}>
+                                <span>Bekor</span>
+                            </label>
+                            <label class="op-status-opt s-archive">
+                                <input type="radio" name="status" value="archive"
+                                       {% if form.status.value == "archive" %}checked{% endif %}>
+                                <span>Arxiv</span>
+                            </label>
+                        </div>
+                        <p class="op-hint">Holat Order.status maydoniga yoziladi.</p>
+                    </div>
+
+                    <div class="op-field">
+                        <label for="surveyComment">Izoh</label>
+
+                        <div class="op-chips">
+                            <button type="button" class="op-chip"
+                                    data-op-chip="Mijoz buyurtmani tasdiqladi.">Tasdiqladi
+                            </button>
+                            <button type="button" class="op-chip"
+                                    data-op-chip="Telefon ko'tarilmadi, keyinroq urinib ko'raman.">Javob bermadi
+                            </button>
+                            <button type="button" class="op-chip"
+                                    data-op-chip="Manzil o'zgartirildi.">Manzil o'zgardi
+                            </button>
+                            <button type="button" class="op-chip"
+                                    data-op-chip="Mijoz narxni qimmat deb topdi.">Narx qimmat
+                            </button>
+                            <button type="button" class="op-chip"
+                                    data-op-chip="Mijoz keyinroq olishini aytdi.">Keyin oladi
+                            </button>
+                        </div>
+
+                        <textarea class="op-textarea" id="surveyComment" name="comment" maxlength="500"
+                                  data-op-comment
+                                  placeholder="Mijoz bilan suhbat natijasi, kelishilgan vaqt va boshqa muhim ma'lumotlar...">{{ order.survey.comment|default_if_none:'' }}</textarea>
+
+                        <div class="op-counter">
+                            <span>Izoh sotuvchi kabinetida ko'rinadi</span>
+                            <span data-op-comment-count>0 / 500</span>
+                        </div>
+                    </div>
+
+{#                    <div class="op-field">#}
+{#                        <label for="nextCall">Qayta qo'ng'iroq vaqti</label>#}
+{#                        <input class="op-input" type="datetime-local" id="nextCall" name="next_call">#}
+{#                        <p class="op-hint">Faqat "Keyin oladi" yoki "Hold" tanlanganda to'ldiriladi.</p>#}
+{#                    </div>#}
+
+                    <div class="op-row-gap">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <svg><use href="#i-save"/></svg>
+                            Saqlash va navbatga qaytish
+                        </button>
+                        <button type="button" class="btn btn-ghost btn-block">
+                            Saqlamasdan chiqish
+                        </button>
+                    </div>
+
+                    <p class="op-hint" style="text-align:center;margin-top:12px">
+                        Tezkor saqlash: <b>Ctrl</b> + <b>Enter</b>
+                    </p>
+                </form>
+            </section>
+
+            <!-- ---------- Buyurtma manbasi ---------- -->
+{#            <section class="op-card">#}
+{#                <div class="op-card-head">#}
+{#                    <span class="op-card-icon"><svg><use href="#i-user"/></svg></span>#}
+{#                    <div>#}
+{#                        <h3>Qo'shimcha</h3>#}
+{#                        <p class="op-card-sub">Buyurtma manbasi</p>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="op-card-body">#}
+{#                    <div class="op-facts">#}
+{#                        <div>#}
+{#                            <div class="op-fact-label">Oqim</div>#}
+{#                            <div class="op-fact-value">Fitnes bilaguzuk</div>#}
+{#                        </div>#}
+{#                        <div>#}
+{#                            <div class="op-fact-label">Sotuvchi</div>#}
+{#                            <div class="op-fact-value">Otabek Sobirov</div>#}
+{#                        </div>#}
+{#                        <div>#}
+{#                            <div class="op-fact-label">Oqim chegirmasi</div>#}
+{#                            <div class="op-fact-value num">10 000 so'm</div>#}
+{#                        </div>#}
+{#                        <div>#}
+{#                            <div class="op-fact-label">Tashriflar</div>#}
+{#                            <div class="op-fact-value num">1 248 ta</div>#}
+{#                        </div>#}
+{#                        <div>#}
+{#                            <div class="op-fact-label">Operator</div>#}
+{#                            <div class="op-fact-value">Dilnoza Karimova</div>#}
+{#                        </div>#}
+{#                        <div>#}
+{#                            <div class="op-fact-label">Manba</div>#}
+{#                            <div class="op-fact-value">Instagram</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </section>#}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+{# Viloyat -> tuman ro'yxati: {viloyat_id: [[tuman_id, nomi], ...]} #}
+{{ districts_json|json_script:"op-districts" }}
+<script>
+    window.OP_REGIONS = JSON.parse(document.getElementById('op-districts').textContent);
+</script>
+{% endblock %}

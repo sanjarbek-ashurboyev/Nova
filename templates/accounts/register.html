@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Ro'yxatdan o'tish - Nova</title>
+  <link rel="stylesheet" href="{% static 'apps/css/auth.css' %}">
+</head>
+<body>
+
+  {% if messages %}
+    <div class="site-messages">
+      {% for message in messages %}
+        <div class="site-message site-message-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="auth-section">
+    <div class="auth-card">
+
+      <div class="auth-logo">
+        <a href="#">
+          <img src="{% static 'apps/img/nova-lockup.svg' %}" alt="Nova">
+        </a>
+      </div>
+
+      <h1 class="auth-title">Yangi akkaunt oching</h1>
+      <p class="auth-subtitle">Bir necha soniyada ro'yxatdan o'ting</p>
+
+      {% if form.non_field_errors %}
+        <div class="auth-alert auth-alert-error">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" class="auth-form" novalidate>
+        {% csrf_token %}
+
+        <div class="auth-field">
+          <label for="{{ form.first_name.id_for_label }}">Ism</label>
+          <input
+            type="text"
+            name="{{ form.first_name.html_name }}"
+            id="{{ form.first_name.id_for_label }}"
+            placeholder="Ismingiz"
+            value="{{ form.first_name.value|default:'' }}"
+            autocomplete="given-name"
+            required
+          >
+          {% if form.first_name.errors %}
+            <span class="auth-field-error">{{ form.first_name.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.last_name.id_for_label }}">Familiya</label>
+          <input
+            type="text"
+            name="{{ form.last_name.html_name }}"
+            id="{{ form.last_name.id_for_label }}"
+            placeholder="Familiyangiz"
+            value="{{ form.last_name.value|default:'' }}"
+            autocomplete="family-name"
+            required
+          >
+          {% if form.last_name.errors %}
+            <span class="auth-field-error">{{ form.last_name.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.phone.id_for_label }}">Telefon raqam</label>
+          <input
+            type="tel"
+            name="{{ form.phone.html_name }}"
+            id="{{ form.phone.id_for_label }}"
+            placeholder="+998 90 123 45 67"
+            value="{{ form.phone.value|default:'' }}"
+            autocomplete="tel"
+            required
+          >
+          {% if form.phone.errors %}
+            <span class="auth-field-error">{{ form.phone.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.password.id_for_label }}">Parol</label>
+          <input
+            type="password"
+            name="{{ form.password.html_name }}"
+            id="{{ form.password.id_for_label }}"
+            placeholder="Kamida 8 ta belgi"
+            autocomplete="new-password"
+            required
+          >
+          {% if form.password.errors %}
+            <span class="auth-field-error">{{ form.password.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.password_confirm.id_for_label }}">Parolni takrorlang</label>
+          <input
+            type="password"
+            name="{{ form.password_confirm.html_name }}"
+            id="{{ form.password_confirm.id_for_label }}"
+            placeholder="Parolni qayta kiriting"
+            autocomplete="new-password"
+            required
+          >
+          {% if form.password_confirm.errors %}
+            <span class="auth-field-error">{{ form.password_confirm.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <label class="auth-checkbox auth-terms">
+          <input type="checkbox" name="agree_terms" required>
+          <span><a href="#">Barcha shartlar</a>ga roziman</span>
+        </label>
+
+        <button type="submit" class="auth-submit">Ro'yxatdan o'tish</button>
+      </form>
+
+      <p class="auth-switch">
+        Hisobingiz bormi? <a href="{% url 'accounts:login' %}">Kirish</a>
+      </p>
+
+    </div>
+  </section>
+
+</body>
+</html>

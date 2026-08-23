@@ -1,0 +1,1618 @@
+[
+  {
+    "model": "accounts.district",
+    "pk": 1,
+    "fields": {
+      "title": "Amudaryo",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 2,
+    "fields": {
+      "title": "Beruniy",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 3,
+    "fields": {
+      "title": "Bo'zatov",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 4,
+    "fields": {
+      "title": "Chimboy",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 5,
+    "fields": {
+      "title": "Ellikqal'a",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 6,
+    "fields": {
+      "title": "Kegeyli",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 7,
+    "fields": {
+      "title": "Mo'ynoq",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 8,
+    "fields": {
+      "title": "Nukus",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 9,
+    "fields": {
+      "title": "Qanliko'l",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 10,
+    "fields": {
+      "title": "Qo'ng'irot",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 11,
+    "fields": {
+      "title": "Qorao'zak",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 12,
+    "fields": {
+      "title": "Shumanay",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 13,
+    "fields": {
+      "title": "Taxtako'pir",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 14,
+    "fields": {
+      "title": "To'rtko'l",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 15,
+    "fields": {
+      "title": "Xo'jayli",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 16,
+    "fields": {
+      "title": "Nukus shahri",
+      "region": 1
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 17,
+    "fields": {
+      "title": "Andijon",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 18,
+    "fields": {
+      "title": "Asaka",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 19,
+    "fields": {
+      "title": "Baliqchi",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 20,
+    "fields": {
+      "title": "Bo'ston",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 21,
+    "fields": {
+      "title": "Buloqboshi",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 22,
+    "fields": {
+      "title": "Izboskan",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 23,
+    "fields": {
+      "title": "Jalaquduq",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 24,
+    "fields": {
+      "title": "Marhamat",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 25,
+    "fields": {
+      "title": "Oltinko'l",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 26,
+    "fields": {
+      "title": "Paxtaobod",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 27,
+    "fields": {
+      "title": "Qo'rg'ontepa",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 28,
+    "fields": {
+      "title": "Shahrixon",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 29,
+    "fields": {
+      "title": "Ulug'nor",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 30,
+    "fields": {
+      "title": "Xo'jaobod",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 31,
+    "fields": {
+      "title": "Andijon shahri",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 32,
+    "fields": {
+      "title": "Xonobod shahri",
+      "region": 2
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 33,
+    "fields": {
+      "title": "Buxoro",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 34,
+    "fields": {
+      "title": "G'ijduvon",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 35,
+    "fields": {
+      "title": "Jondor",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 36,
+    "fields": {
+      "title": "Kogon",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 37,
+    "fields": {
+      "title": "Olot",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 38,
+    "fields": {
+      "title": "Peshku",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 39,
+    "fields": {
+      "title": "Qorako'l",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 40,
+    "fields": {
+      "title": "Qorovulbozor",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 41,
+    "fields": {
+      "title": "Romitan",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 42,
+    "fields": {
+      "title": "Shofirkon",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 43,
+    "fields": {
+      "title": "Vobkent",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 44,
+    "fields": {
+      "title": "Buxoro shahri",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 45,
+    "fields": {
+      "title": "Kogon shahri",
+      "region": 3
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 46,
+    "fields": {
+      "title": "Bag'dod",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 47,
+    "fields": {
+      "title": "Beshariq",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 48,
+    "fields": {
+      "title": "Buvayda",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 49,
+    "fields": {
+      "title": "Dang'ara",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 50,
+    "fields": {
+      "title": "Farg'ona",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 51,
+    "fields": {
+      "title": "Furqat",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 52,
+    "fields": {
+      "title": "Oltiariq",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 53,
+    "fields": {
+      "title": "O'zbekiston",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 54,
+    "fields": {
+      "title": "Qo'shtepa",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 55,
+    "fields": {
+      "title": "Quva",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 56,
+    "fields": {
+      "title": "Rishton",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 57,
+    "fields": {
+      "title": "So'x",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 58,
+    "fields": {
+      "title": "Toshloq",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 59,
+    "fields": {
+      "title": "Uchko'prik",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 60,
+    "fields": {
+      "title": "Yozyovon",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 61,
+    "fields": {
+      "title": "Farg'ona shahri",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 62,
+    "fields": {
+      "title": "Marg'ilon shahri",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 63,
+    "fields": {
+      "title": "Qo'qon shahri",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 64,
+    "fields": {
+      "title": "Quvasoy shahri",
+      "region": 4
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 65,
+    "fields": {
+      "title": "Arnasoy",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 66,
+    "fields": {
+      "title": "Baxmal",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 67,
+    "fields": {
+      "title": "Do'stlik",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 68,
+    "fields": {
+      "title": "Forish",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 69,
+    "fields": {
+      "title": "G'allaorol",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 70,
+    "fields": {
+      "title": "Mirzacho'l",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 71,
+    "fields": {
+      "title": "Paxtakor",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 72,
+    "fields": {
+      "title": "Sharof Rashidov",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 73,
+    "fields": {
+      "title": "Yangiobod",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 74,
+    "fields": {
+      "title": "Zafarobod",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 75,
+    "fields": {
+      "title": "Zarbdor",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 76,
+    "fields": {
+      "title": "Zomin",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 77,
+    "fields": {
+      "title": "Jizzax shahri",
+      "region": 5
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 78,
+    "fields": {
+      "title": "Bog'ot",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 79,
+    "fields": {
+      "title": "Gurlan",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 80,
+    "fields": {
+      "title": "Hazorasp",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 81,
+    "fields": {
+      "title": "Qo'shko'pir",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 82,
+    "fields": {
+      "title": "Shovot",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 83,
+    "fields": {
+      "title": "Tuproqqal'a",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 84,
+    "fields": {
+      "title": "Urganch",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 85,
+    "fields": {
+      "title": "Xiva",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 86,
+    "fields": {
+      "title": "Xonqa",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 87,
+    "fields": {
+      "title": "Yangiariq",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 88,
+    "fields": {
+      "title": "Yangibozor",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 89,
+    "fields": {
+      "title": "Urganch shahri",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 90,
+    "fields": {
+      "title": "Xiva shahri",
+      "region": 6
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 91,
+    "fields": {
+      "title": "Chortoq",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 92,
+    "fields": {
+      "title": "Chust",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 93,
+    "fields": {
+      "title": "Kosonsoy",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 94,
+    "fields": {
+      "title": "Mingbuloq",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 95,
+    "fields": {
+      "title": "Namangan",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 96,
+    "fields": {
+      "title": "Norin",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 97,
+    "fields": {
+      "title": "Pop",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 98,
+    "fields": {
+      "title": "To'raqo'rg'on",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 99,
+    "fields": {
+      "title": "Uchqo'rg'on",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 100,
+    "fields": {
+      "title": "Uychi",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 101,
+    "fields": {
+      "title": "Yangiqo'rg'on",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 102,
+    "fields": {
+      "title": "Namangan shahri",
+      "region": 7
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 103,
+    "fields": {
+      "title": "Karmana",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 104,
+    "fields": {
+      "title": "Konimex",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 105,
+    "fields": {
+      "title": "Navbahor",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 106,
+    "fields": {
+      "title": "Nurota",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 107,
+    "fields": {
+      "title": "Qiziltepa",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 108,
+    "fields": {
+      "title": "Tomdi",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 109,
+    "fields": {
+      "title": "Uchquduq",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 110,
+    "fields": {
+      "title": "Xatirchi",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 111,
+    "fields": {
+      "title": "Navoiy shahri",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 112,
+    "fields": {
+      "title": "Zarafshon shahri",
+      "region": 8
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 113,
+    "fields": {
+      "title": "Chiroqchi",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 114,
+    "fields": {
+      "title": "Dehqonobod",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 115,
+    "fields": {
+      "title": "G'uzor",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 116,
+    "fields": {
+      "title": "Kasbi",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 117,
+    "fields": {
+      "title": "Kitob",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 118,
+    "fields": {
+      "title": "Koson",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 119,
+    "fields": {
+      "title": "Ko'kdala",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 120,
+    "fields": {
+      "title": "Mirishkor",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 121,
+    "fields": {
+      "title": "Muborak",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 122,
+    "fields": {
+      "title": "Nishon",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 123,
+    "fields": {
+      "title": "Qamashi",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 124,
+    "fields": {
+      "title": "Qarshi",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 125,
+    "fields": {
+      "title": "Shahrisabz",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 126,
+    "fields": {
+      "title": "Yakkabog'",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 127,
+    "fields": {
+      "title": "Qarshi shahri",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 128,
+    "fields": {
+      "title": "Shahrisabz shahri",
+      "region": 9
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 129,
+    "fields": {
+      "title": "Bulung'ur",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 130,
+    "fields": {
+      "title": "Ishtixon",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 131,
+    "fields": {
+      "title": "Jomboy",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 132,
+    "fields": {
+      "title": "Kattaqo'rg'on",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 133,
+    "fields": {
+      "title": "Narpay",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 134,
+    "fields": {
+      "title": "Nurobod",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 135,
+    "fields": {
+      "title": "Oqdaryo",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 136,
+    "fields": {
+      "title": "Past Darg'om",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 137,
+    "fields": {
+      "title": "Payariq",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 138,
+    "fields": {
+      "title": "Paxtachi",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 139,
+    "fields": {
+      "title": "Qo'shrabot",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 140,
+    "fields": {
+      "title": "Samarqand",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 141,
+    "fields": {
+      "title": "Toyloq",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 142,
+    "fields": {
+      "title": "Urgut",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 143,
+    "fields": {
+      "title": "Samarqand shahri",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 144,
+    "fields": {
+      "title": "Kattaqo'rg'on shahri",
+      "region": 10
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 145,
+    "fields": {
+      "title": "Boyovut",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 146,
+    "fields": {
+      "title": "Guliston",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 147,
+    "fields": {
+      "title": "Mirzaobod",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 148,
+    "fields": {
+      "title": "Oqoltin",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 149,
+    "fields": {
+      "title": "Sardoba",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 150,
+    "fields": {
+      "title": "Sayxunobod",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 151,
+    "fields": {
+      "title": "Sirdaryo",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 152,
+    "fields": {
+      "title": "Xovos",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 153,
+    "fields": {
+      "title": "Guliston shahri",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 154,
+    "fields": {
+      "title": "Shirin shahri",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 155,
+    "fields": {
+      "title": "Yangiyer shahri",
+      "region": 11
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 156,
+    "fields": {
+      "title": "Angor",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 157,
+    "fields": {
+      "title": "Bandixon",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 158,
+    "fields": {
+      "title": "Boysun",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 159,
+    "fields": {
+      "title": "Denov",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 160,
+    "fields": {
+      "title": "Jarqo'rg'on",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 161,
+    "fields": {
+      "title": "Muzrabot",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 162,
+    "fields": {
+      "title": "Oltinsoy",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 163,
+    "fields": {
+      "title": "Qiziriq",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 164,
+    "fields": {
+      "title": "Qumqo'rg'on",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 165,
+    "fields": {
+      "title": "Sariosiyo",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 166,
+    "fields": {
+      "title": "Sherobod",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 167,
+    "fields": {
+      "title": "Sho'rchi",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 168,
+    "fields": {
+      "title": "Termiz",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 169,
+    "fields": {
+      "title": "Uzun",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 170,
+    "fields": {
+      "title": "Termiz shahri",
+      "region": 12
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 171,
+    "fields": {
+      "title": "Bekobod",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 172,
+    "fields": {
+      "title": "Bo'ka",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 173,
+    "fields": {
+      "title": "Bo'stonliq",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 174,
+    "fields": {
+      "title": "Chinoz",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 175,
+    "fields": {
+      "title": "Ohangaron",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 176,
+    "fields": {
+      "title": "Oqqo'rg'on",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 177,
+    "fields": {
+      "title": "O'rta Chirchiq",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 178,
+    "fields": {
+      "title": "Parkent",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 179,
+    "fields": {
+      "title": "Piskent",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 180,
+    "fields": {
+      "title": "Qibray",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 181,
+    "fields": {
+      "title": "Quyi Chirchiq",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 182,
+    "fields": {
+      "title": "Yangiyo'l",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 183,
+    "fields": {
+      "title": "Yuqori Chirchiq",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 184,
+    "fields": {
+      "title": "Zangiota",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 185,
+    "fields": {
+      "title": "Angren shahri",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 186,
+    "fields": {
+      "title": "Bekobod shahri",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 187,
+    "fields": {
+      "title": "Chirchiq shahri",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 188,
+    "fields": {
+      "title": "Nurafshon shahri",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 189,
+    "fields": {
+      "title": "Olmaliq shahri",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 190,
+    "fields": {
+      "title": "Yangiyo'l shahri",
+      "region": 13
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 191,
+    "fields": {
+      "title": "Bektemir",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 192,
+    "fields": {
+      "title": "Chilonzor",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 193,
+    "fields": {
+      "title": "Mirobod",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 194,
+    "fields": {
+      "title": "Mirzo Ulug'bek",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 195,
+    "fields": {
+      "title": "Olmazor",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 196,
+    "fields": {
+      "title": "Sergeli",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 197,
+    "fields": {
+      "title": "Shayxontohur",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 198,
+    "fields": {
+      "title": "Uchtepa",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 199,
+    "fields": {
+      "title": "Yakkasaroy",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 200,
+    "fields": {
+      "title": "Yangihayot",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 201,
+    "fields": {
+      "title": "Yashnobod",
+      "region": 14
+    }
+  },
+  {
+    "model": "accounts.district",
+    "pk": 202,
+    "fields": {
+      "title": "Yunusobod",
+      "region": 14
+    }
+  }
+]

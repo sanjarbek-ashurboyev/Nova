@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 472 432" width="472" height="432" role="img" aria-label="Nova">
+<defs>
+  <linearGradient id="ma" x1="60" y1="30" x2="410" y2="400" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#37F4FE"/><stop offset=".30" stop-color="#04A6FE"/>
+    <stop offset=".62" stop-color="#0166FD"/><stop offset="1" stop-color="#0B2FE8"/>
+  </linearGradient>
+  <linearGradient id="mb" x1="60" y1="120" x2="420" y2="330" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#0A2BA8"/><stop offset="1" stop-color="#05166B"/>
+  </linearGradient>
+  <clipPath id="mc"><path d="M 6 416.49 A 9 9 0 0 0 19.47 424.31 L 124.92 364.05 A 22 22 0 0 0 136 344.95 L 136 234.68 A 7 7 0 0 1 147.31 229.17 L 360.97 396.21 A 65 65 0 0 0 466 345 L 466 15.51 A 9 9 0 0 0 452.53 7.69 L 347.08 67.95 A 22 22 0 0 0 336 87.05 L 336 197.32 A 7 7 0 0 1 324.69 202.83 L 111.03 35.79 A 65 65 0 0 0 6 87 Z"/></clipPath>
+</defs>
+  <g><path fill="url(#ma)" d="M 6 416.49 A 9 9 0 0 0 19.47 424.31 L 124.92 364.05 A 22 22 0 0 0 136 344.95 L 136 234.68 A 7 7 0 0 1 147.31 229.17 L 360.97 396.21 A 65 65 0 0 0 466 345 L 466 15.51 A 9 9 0 0 0 452.53 7.69 L 347.08 67.95 A 22 22 0 0 0 336 87.05 L 336 197.32 A 7 7 0 0 1 324.69 202.83 L 111.03 35.79 A 65 65 0 0 0 6 87 Z"/><g clip-path="url(#mc)" fill="url(#mb)"><path d="M 20 129.63 L 136 220.32 L 136 357.71 L 20 424 Z"/><path d="M 452 302.37 L 336 211.68 L 336 74.29 L 452 8 Z"/></g></g>
+</svg>

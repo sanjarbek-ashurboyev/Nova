@@ -1,0 +1,501 @@
+{% extends 'base/dashboard_base.html' %}
+{% load humanize %}
+
+{% block title %}Market{% endblock %}
+
+{% block dashboard_css %}
+<style>
+    /* ---------- Sahifa sarlavhasi, kategoriyalar va qidiruv ---------- */
+    .market-header {
+        background: white;
+        border-radius: 20px;
+        padding: 25px 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .market-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 20px;
+    }
+
+    .category-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .category-btn {
+        display: inline-block;
+        padding: 8px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 30px;
+        background: white;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .category-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        text-decoration: none;
+    }
+
+    .category-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: white;
+    }
+
+    .search-box-modern form {
+        display: flex;
+        gap: 8px;
+        max-width: 420px;
+    }
+
+    .search-box-modern .search-input {
+        flex: 1;
+        height: 44px;
+        padding: 0 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.25s ease;
+    }
+
+    .search-box-modern .search-input:focus {
+        border-color: #667eea;
+    }
+
+    .search-box-modern button {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        cursor: pointer;
+    }
+
+    /* ---------- Mahsulot kartasi ---------- */
+    /* Selektorlar '.product-card-modern' ostiga yozilgan: style.css dagi
+       umumiy '.product-image' / '.product-title' / '.product-price'
+       qoidalari bu kartaga ta'sir qilmasligi uchun */
+    .product-card-modern {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card-modern:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 32px rgba(102, 126, 234, 0.18);
+    }
+
+    /* style.css va index_style.css dagi umumiy '.product-image' qoidasi
+       'position: absolute' beradi. Shu sabab rasm kartadan chiqib ketib,
+       nom/narx/To'lov qatorlarini bosib qolardi - shuning uchun bekor qilinadi */
+    .product-card-modern .product-image {
+        position: static;
+        top: auto;
+        left: auto;
+        height: 240px;
+        background: #f8fafc;
+    }
+
+    .product-card-modern .product-image a {
+        display: block;
+        height: 100%;
+    }
+
+    .product-card-modern .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Mahsulotda rasm bo'lmasa ko'rinadigan joy */
+    .product-card-modern .product-image--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .product-card-modern .product-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 22px 22px 24px;
+    }
+
+    .product-card-modern .product-title {
+        margin-bottom: 12px;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .product-card-modern .product-title a {
+        color: #1e293b;
+        text-decoration: none;
+    }
+
+    .product-card-modern .product-title a:hover {
+        color: #667eea;
+    }
+
+    .product-card-modern .product-price {
+        margin-bottom: 18px;
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+        color: #667eea;
+    }
+
+    /* Qatorlar kulrang quti ichida emas - ostidagi ingichka chiziq bilan ajratiladi */
+    .product-card-modern .product-details {
+        margin: 0 0 20px;
+        padding: 0;
+        list-style: none;
+        background: none;
+    }
+
+    .product-card-modern .product-details li {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        padding: 13px 0;
+        border-bottom: 1px solid #eef2f7;
+        font-size: 15px;
+        color: #64748b;
+    }
+
+    .product-card-modern .product-details strong {
+        font-weight: 700;
+        color: #1e293b;
+        white-space: nowrap;
+    }
+
+    /* margin-top:auto - tugmalar kartaning eng pastiga tekislanadi,
+       shunda matni turlicha bo'lgan kartalar ham bir tekis ko'rinadi */
+    .product-card-modern .product-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .product-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px 16px;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .product-btn.primary {
+        background: linear-gradient(to right, #667eea 0%, #8b5cf6 100%);
+        color: white;
+    }
+
+    .product-btn.primary:hover {
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .product-btn.secondary {
+        background: #eef1f9;
+        color: #334155;
+    }
+
+    .product-btn.secondary:hover {
+        background: #e2e8f5;
+        color: #1e293b;
+        text-decoration: none;
+    }
+
+    .pagination-modern {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 20px 0;
+    }
+
+    .pagination-modern .page-item {
+        list-style: none;
+    }
+
+    .pagination-modern .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 42px;
+        height: 42px;
+        padding: 0 16px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        color: #475569;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .pagination-modern .page-link:hover {
+        background: #f8fafc;
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(102, 126, 234, 0.2);
+    }
+
+    .pagination-modern .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: white;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .pagination-modern .page-item.disabled .page-link {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .pagination-modern .page-link.prev-next {
+        padding: 0 20px;
+    }
+
+    .pagination-modern .page-link i {
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .pagination-modern {
+            gap: 6px;
+            padding: 15px 0;
+        }
+
+        .pagination-modern .page-link {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+
+        .pagination-modern .page-link.prev-next {
+            padding: 0 14px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+                <!-- Modal -->
+                <div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content" style="border-radius: 20px; border: none;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px 20px 0 0;">
+                                <h5 class="modal-title">
+                                    <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/FFFFFF/link--v1.png" alt="link--v1"/> Oqim yaratish
+                                </h5>
+                                <button type="button" class="close text-white" data-dismiss="modal">
+                                    <span>×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="padding: 30px;">
+                                <form method="POST" class="form-class" action="{% url 'catalog:thread-create' %}">
+                                    {% csrf_token %}
+                                    <input name="product" type="hidden" id="hidden_product" value="">
+
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Oqim nomi</label>
+                                            <input type="text" name="name" class="form-control" placeholder="Oqim uchun nom kiriting" required id="id_name">
+
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Chegirma</label>
+                                            <input type="number" name="discount" class="form-control" value="0" min="0" step="1" id="id_discount">
+                                            <small class="form-text text-muted" id="discount_hint"></small>
+
+                                        </div>
+
+                                    <button type="submit" class="btn btn-primary w-100 mt-3" style="padding: 12px; border-radius: 12px;">
+                                        <img width="15" height="15" src="https://img.icons8.com/ios-filled/50/FFFFFF/checkmark--v1.png" alt="checkmark--v1"/> Oqim yaratish
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="market-header">
+                    <h3>
+                        <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/shopping-cart--v1.png" alt="shopping-cart--v1"/> Sotuvdagi Mahsulotlar
+                    </h3>
+
+                    <div class="category-tabs">
+                        <a href="{% url 'catalog:cabinet-market' %}" class="category-btn {% if not current %}
+                        	active
+                        {% endif %} ">Hammasi</a>
+
+                        {% for category in categories %}
+                        	<a href="{% url 'catalog:cabinet-market-category' slug=category.slug %}" class="category-btn {% if current == category.slug %}
+                        	active
+                        {% endif %}">
+                                {{ category.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+
+                    <div class="search-box-modern">
+                        <form method="get" autocomplete="off">
+                            <input id="search-input" name="q" class="search-input" type="search"
+                                   placeholder="Mahsulot qidirish..." value="{{ query }}">
+                            <button type="submit">
+                                <img width="20" height="20" src="https://img.icons8.com/ios/50/search--v1.png" alt="search--v1"/>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    {% for product in products %}
+                    	<div class="col-lg-4 col-md-6 mb-4">
+                            <div class="product-card-modern">
+                                {% if product.thumbnail %}
+                                    <div class="product-image">
+                                        <a href="{% url 'catalog:product-detail' slug=product.slug %}" target="_blank">
+                                            <img src="{{ product.thumbnail.image.url }}" alt="{{ product.name }}">
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="product-image product-image--empty">Rasm yo'q</div>
+                                {% endif %}
+
+                                <div class="product-body">
+                                    <div class="product-title">
+                                        <a href="{% url 'catalog:product-detail' slug=product.slug %}" target="_blank">
+                                            {{ product.name }}
+                                        </a>
+                                    </div>
+
+                                    <div class="product-price">{{ product.price|intcomma }} so'm</div>
+
+                                    <ul class="product-details">
+                                        <li>
+                                            <span>To'lov:</span>
+                                            <strong>{{ product.return_price|intcomma }} so'm</strong>
+                                        </li>
+                                        <li>
+                                            <span>Zaxirada:</span>
+                                            <strong>{{ product.stock }} ta</strong>
+                                        </li>
+                                    </ul>
+
+                                    <div class="product-actions">
+                                        <button type="button" class="product-btn primary btn_open_modal" data-toggle="modal"
+                                                data-target="#edit-profile-modal"
+                                                data-product-id="{{ product.pk }}"
+                                                data-max-discount="{{ product.return_price }}">
+                                            <img width="20" height="20" src="https://img.icons8.com/ios/50/FFFFFF/link--v1.png" alt="link--v1"/> Oqim yaratish
+                                        </button>
+
+                                            <a href="https://t.me/Alijahon_bot/2687" target="_blank" class="product-btn secondary">
+                                                <img width="20" height="20" src="https://img.icons8.com/ios/50/ingredients-list.png" alt="ingredients-list"/> Reklama Posti
+                                            </a>
+
+                                        <a href="{% url 'catalog:product-detail' slug=product.slug %}" target="_blank" class="product-btn secondary">
+                                            <img width="20" height="20" src="https://img.icons8.com/fluency-systems-filled/48/visible.png" alt="visible"/> Batafsil
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+
+                {% if is_paginated %}
+                    <ul class="pagination-modern mt-4">
+                        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                            {% if page_obj.has_previous %}
+                                <a class="page-link prev-next" href="{% querystring page=page_obj.previous_page_number %}">
+                                    <img width="10" height="10" src="https://img.icons8.com/ios-filled/50/back.png" alt="back"/> Oldingi
+                                </a>
+                            {% else %}
+                                <span class="page-link prev-next"><img width="10" height="10" src="https://img.icons8.com/ios-filled/50/back.png" alt="back"/> Oldingi</span>
+                            {% endif %}
+                        </li>
+
+                        {% for num in paginator.page_range %}
+                            <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                                <a class="page-link" href="{% querystring page=num %}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+
+                        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                            {% if page_obj.has_next %}
+                                <a class="page-link prev-next" href="{% querystring page=page_obj.next_page_number %}">
+                                    Keyingi <img width="10" height="10" src="https://img.icons8.com/ios-filled/50/forward--v1.png" alt="forward--v1"/>
+                                </a>
+                            {% else %}
+                                <span class="page-link prev-next">Keyingi <img width="10" height="10" src="https://img.icons8.com/ios-filled/50/forward--v1.png" alt="forward--v1"/></span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Har bir karta tugmasi o'z mahsulotini va chegirma chegarasini modalga uzatadi
+    $('.btn_open_modal').on('click', function () {
+        const maxDiscount = Number($(this).data('max-discount')) || 0;
+
+        $('#hidden_product').val($(this).data('product-id'));
+        $('#id_name').val('');
+        $('#id_discount')
+            .attr('max', maxDiscount)
+            .val(0)
+            .attr('placeholder', "Chegirma miqdori: " + maxDiscount.toLocaleString('ru-RU') + " so'mgacha");
+        $('#discount_hint').text("Bu mahsulot uchun eng ko'pi: " + maxDiscount.toLocaleString('ru-RU') + " so'm");
+    });
+</script>
+{% endblock %}

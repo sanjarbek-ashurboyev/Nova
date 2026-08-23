@@ -1,0 +1,249 @@
+{% extends 'base/dashboard_base.html' %}
+
+{% block title %}Sozlamalar{% endblock %}
+
+{% block dashboard_css %}
+<style>
+    .settings-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .settings-header {
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+    }
+
+    .settings-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 4px;
+    }
+
+    .settings-header p {
+        font-size: 14px;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .settings-card .form-group {
+        margin-bottom: 20px;
+    }
+
+    .settings-card label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #475569;
+        margin-bottom: 6px;
+    }
+
+    .settings-card .form-control {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        height: auto;
+        transition: all 0.3s ease;
+    }
+
+    .settings-card .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 28px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .settings-actions {
+        text-align: right;
+    }
+
+    @media (max-width: 767px) {
+        .settings-card {
+            padding: 20px;
+        }
+
+        .settings-actions .btn-save {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="settings-card">
+    <div class="settings-header">
+        <h3>Sozlamalar</h3>
+        <p>Profil ma'lumotlaringizni tahrirlang</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <ul class="mb-0 pl-3">
+                {% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}
+                {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_first_name">Ism</label>
+                    <input type="text" name="first_name" id="id_first_name" class="form-control"
+                           value="{{ form.first_name.value|default_if_none:'' }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_last_name">Familiya</label>
+                    <input type="text" name="last_name" id="id_last_name" class="form-control"
+                           value="{{ form.last_name.value|default_if_none:'' }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_region">Viloyat</label>
+                    <select id="id_region" class="form-control">
+                        <option value="">Viloyatni tanlang</option>
+                        {% for region in regions %}
+                            <option value="{{ region.pk }}">{{ region.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_district">Tuman / Shahar</label>
+                    <select name="district" id="id_district" class="form-control"
+                            data-selected="{{ form.district.value|default_if_none:'' }}">
+                        <option value="">Avval viloyatni tanlang</option>
+                        {% for region in regions %}
+                            {% for district in region.districts.all %}
+                                <option value="{{ district.pk }}" data-region="{{ region.pk }}">{{ district.title }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="id_telegram_id">Telegram ID</label>
+            <input type="text" name="telegram_id" id="id_telegram_id" class="form-control"
+                   value="{{ form.telegram_id.value|default_if_none:'' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="id_description">Haqida</label>
+            <textarea name="description" id="id_description" rows="3"
+                      class="form-control">{{ form.description.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="settings-actions">
+            <button type="submit" class="btn btn-save">Saqlash</button>
+        </div>
+    </form>
+</div>
+    <br>
+
+    <div class="settings-card">
+                    <div class="settings-header">
+                        <h3>Parolni o'zgartirish</h3>
+                        <p>Hisobingiz xavfsizligi uchun parolni muntazam yangilang</p>
+                    </div>
+
+                    <form action="{% url 'accounts:cabinet-password' %}" method="post" novalidate="">
+                        {% csrf_token %}
+                        <input type="hidden" name="_password_change" value="1">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_new_password">Yangi parol</label>
+                                    <input type="password" name="new_password1" id="id_new_password" class="form-control" autocomplete="new-password" placeholder="Yangi parol (kamida 8 belgi)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_confirm_password">Yangi parolni tasdiqlang</label>
+                                    <input type="password" name="new_password2" id="id_confirm_password" class="form-control" autocomplete="new-password" placeholder="Yangi parolni qayta kiriting">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-save">
+                                <i class="icofont-key"></i> Parolni o'zgartirish
+                            </button>
+                        </div>
+                    </form>
+                </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const regionSelect = document.getElementById('id_region');
+        const districtSelect = document.getElementById('id_district');
+        if (!regionSelect || !districtSelect) return;
+
+        // Barcha tumanlar sahifa bilan birga keladi, shuning uchun AJAX kerak emas
+        const allOptions = Array.from(districtSelect.querySelectorAll('option[data-region]'));
+
+        function renderDistricts(regionId, keepValue) {
+            districtSelect.innerHTML = '';
+            districtSelect.appendChild(new Option(
+                regionId ? 'Tumanni tanlang' : 'Avval viloyatni tanlang', ''
+            ));
+            allOptions
+                .filter(function (option) { return option.dataset.region === regionId; })
+                .forEach(function (option) { districtSelect.appendChild(option); });
+            districtSelect.value = keepValue || '';
+        }
+
+        regionSelect.addEventListener('change', function () {
+            renderDistricts(this.value, '');
+        });
+
+        // Saqlangan (yoki xatolik bilan qaytgan) tumanni tiklaymiz
+        const selected = districtSelect.dataset.selected;
+        const current = allOptions.find(function (option) { return option.value === selected; });
+        if (current) {
+            regionSelect.value = current.dataset.region;
+            renderDistricts(current.dataset.region, selected);
+        } else {
+            renderDistricts('', '');
+        }
+    });
+</script>
+{% endblock %}

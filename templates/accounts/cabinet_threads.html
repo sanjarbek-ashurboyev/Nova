@@ -1,0 +1,479 @@
+{% extends 'base/dashboard_base.html' %}
+{% load humanize %}
+
+{% block title %}Oqimlar{% endblock %}
+
+{% block dashboard_css %}
+<style>
+    /* ---------- Sahifa sarlavhasi va qidiruv ---------- */
+    .urls-header {
+        background: white;
+        border-radius: 20px;
+        padding: 25px 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .urls-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .search-bar {
+        display: flex;
+        gap: 8px;
+        max-width: 480px;
+        margin-bottom: 25px;
+    }
+
+    .search-bar input {
+        flex: 1;
+        height: 44px;
+        padding: 0 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.25s ease;
+    }
+
+    .search-bar input:focus {
+        border-color: #667eea;
+    }
+
+    .search-bar button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 44px;
+        padding: 0 20px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    /* ---------- Oqim kartasi ---------- */
+    .stream-card {
+        height: 100%;
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stream-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 32px rgba(102, 126, 234, 0.18);
+    }
+
+    .stream-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    /* min-width:0 - uzun nom flex ichida to'g'ri qisqarishi uchun */
+    .stream-title {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .stream-benefit {
+        flex: 0 0 auto;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: #fef2f2;
+        color: #dc2626;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .delete-btn {
+        flex: 0 0 auto;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 10px;
+        background: #f1f5f9;
+        color: #ef4444;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .delete-btn:hover {
+        background: #fee2e2;
+    }
+
+    .stream-body {
+        padding: 18px 20px 20px;
+    }
+
+    .link-input-group {
+        margin-bottom: 14px;
+    }
+
+    .link-input {
+        width: 100%;
+        height: 42px;
+        padding: 0 14px;
+        border: 2px dashed #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+        color: #475569;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .link-input:focus {
+        border-color: #667eea;
+        border-style: solid;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 8px;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .action-btn.copy {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    /* JS nusxa olingandan keyin shu klassni qo'shadi */
+    .action-btn.copy.is-copied {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .action-btn.view {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    /* Telegram brend rangi */
+    .action-btn.telegram {
+        background: linear-gradient(135deg, #2aabee 0%, #229ed9 100%);
+        color: white;
+    }
+
+    .action-btn.view:hover {
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .action-btn.telegram:hover {
+        box-shadow: 0 6px 16px rgba(34, 158, 217, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .action-btn i {
+        font-size: 15px;
+    }
+
+    /* ---------- O'chirishni tasdiqlash oynasi ---------- */
+    .delete-modal .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .delete-modal .modal-header {
+        background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+        border-bottom: none;
+        color: white;
+    }
+
+    .delete-modal .modal-title {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .delete-modal .modal-body {
+        padding: 26px 30px;
+    }
+
+    .delete-question {
+        margin: 0 0 6px;
+        font-size: 16px;
+        color: #1e293b;
+    }
+
+    .delete-warning {
+        margin: 0;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .delete-modal .modal-footer {
+        gap: 10px;
+        padding: 16px 30px 24px;
+        border-top: none;
+    }
+
+    .btn-cancel,
+    .btn-confirm-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 0;
+        padding: 11px 22px;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .btn-cancel {
+        background: #eef1f9;
+        color: #334155;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f5;
+    }
+
+    .btn-confirm-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+        color: white;
+    }
+
+    .btn-confirm-delete:hover {
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    /* ---------- Sahifalash ---------- */
+    .pagination-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 20px 0;
+    }
+
+    .pagination-wrap a,
+    .pagination-wrap .current {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 42px;
+        height: 42px;
+        padding: 0 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        color: #475569;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .pagination-wrap a:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    .pagination-wrap .current {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .urls-header {
+            padding: 20px;
+        }
+
+        .search-bar {
+            max-width: 100%;
+        }
+
+        .action-btn span {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="modal fade delete-modal" id="delete-thread-modal" tabindex="-1" role="dialog"
+         aria-labelledby="delete-thread-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete-thread-title">Oqimni o'chirish</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Yopish">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="delete-question">
+                        <strong id="delete-thread-name"></strong> oqimini rostdan ham o'chirmoqchimisiz?
+                    </p>
+                    <p class="delete-warning">Bu amalni qaytarib bo'lmaydi.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" data-dismiss="modal">Bekor qilish</button>
+
+                    <form method="post" id="delete-thread-form" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-confirm-delete">
+                            <img width="18" height="18" src="https://img.icons8.com/material-outlined/24/FFFFFF/filled-trash.png" alt="filled-trash"/>
+                            O'chirish
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="urls-header">
+        <h3>
+            <img width="30" height="30" src="https://img.icons8.com/ios-filled/50/link--v1.png" alt="link--v1"/> Mening Havolalarim
+        </h3>
+    </div>
+
+    <form method="get" class="search-bar" autocomplete="off">
+        <input type="text" name="q" value="{{ query }}" placeholder="Oqim nomi yoki ID bo'yicha qidirish...">
+        <button type="submit"><img width="20" height="20" src="https://img.icons8.com/ios-filled/50/FFFFFF/search--v1.png" alt="search--v1"/> Qidirish</button>
+    </form>
+
+    <div class="row">
+        {% for thread in threads %}
+        	<div class="col-lg-6 col-md-12 mb-4">
+            <div class="stream-card">
+                <div class="stream-header">
+                    <h5 class="stream-title">{{ thread.name }}</h5>
+
+                    <span class="stream-benefit">-{{ thread.discount|intcomma }}</span>
+
+                    <button type="button" class="delete-btn" title="O'chirish"
+                            data-toggle="modal" data-target="#delete-thread-modal"
+                            data-action="{% url 'catalog:thread-delete' pk=thread.id %}"
+                            data-thread-name="{{ thread.name }}">
+                        <img width="20" height="20" src="https://img.icons8.com/material-outlined/24/FA5252/filled-trash.png" alt="filled-trash"/>
+                    </button>
+                </div>
+
+                <div class="stream-body">
+                    <div class="link-input-group">
+                        <input type="text" readonly class="link-input ref-link-{{ thread.id }}"
+                               value="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:thread-detail' pk=thread.id %}">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="button" class="action-btn copy" onclick="copyLink({{ thread.id }}, this)">
+                            <img width="20" height="20" src="https://img.icons8.com/material-outlined/24/FFFFFF/copy.png" alt="copy"/>
+                            <span>Nusxa olish</span>
+                        </button>
+                        <a href="{% url 'catalog:thread-detail' pk=thread.id %}" target="_blank" class="action-btn view">
+                            <img width="20" height="20" src="https://img.icons8.com/ios/50/FFFFFF/shortcut.png" alt="shortcut"/>
+                            <span>Ko'rish</span>
+                        </a>
+                        <a href="#" target="_blank" class="action-btn telegram">
+                            <img width="20" height="20" src="https://img.icons8.com/ios/50/FFFFFF/telegram.png" alt="telegram"/>
+                            <span>Telegram</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+
+    {% if is_paginated %}
+        <div class="pagination-wrap">
+            {% if page_obj.has_previous %}
+                <a href="{% querystring page=1 %}" title="Birinchi sahifa">
+                    <img width="15" height="15" src="https://img.icons8.com/fluency-systems-filled/48/1A1A1A/first-1.png" alt="first-1"/>
+                </a>
+                <a href="{% querystring page=page_obj.previous_page_number %}" title="Oldingi sahifa">
+                    <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/1A1A1A/back.png" alt="back"/>
+                </a>
+            {% endif %}
+
+            <span class="current">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="{% querystring page=page_obj.next_page_number %}" title="Keyingi sahifa">
+                    <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/1A1A1A/forward.png" alt="forward"/>
+                </a>
+                <a href="{% querystring page=paginator.num_pages %}" title="Oxirgi sahifa">
+                    <img width="15" height="15" src="https://img.icons8.com/fluency-systems-filled/48/1A1A1A/last-1.png" alt="last-1"/>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Modal ochilishidan oldin qaysi oqim o'chirilayotganini formaga yozadi.
+    // 'relatedTarget' - modalni ochgan tugma.
+    $('#delete-thread-modal').on('show.bs.modal', function (event) {
+        const btn = $(event.relatedTarget);
+
+        $('#delete-thread-form').attr('action', btn.data('action'));
+        $('#delete-thread-name').text(btn.data('thread-name'));
+    });
+
+    function copyLink(streamId, btn) {
+        const input = document.querySelector('.ref-link-' + streamId);
+        const originalContent = btn.innerHTML;
+
+        navigator.clipboard.writeText(input.value).then(function () {
+            btn.innerHTML = '<img width="20" height="20" src="https://img.icons8.com/ios-filled/50/FFFFFF/checkmark.png" alt="checkmark"/><span>Nusxa olindi!</span>';
+            btn.classList.add('is-copied');
+
+            setTimeout(function () {
+                btn.innerHTML = originalContent;
+                btn.classList.remove('is-copied');
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

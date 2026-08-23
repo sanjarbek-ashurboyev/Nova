@@ -1,0 +1,87 @@
+{% load static %}
+{% comment %} ==========================================================================
+   Operator paneli - asosiy shablon
+
+   Barcha operator sahifalari shu fayldan meros oladi:
+       {% extends 'base/operator_base.html' %}
+
+   site_base.html dan farqi: operator paneli mustaqil ish maydoni -
+   sayt menyusi, footer va Bootstrap kerak emas, faqat operator.css.
+
+   Bloklar:
+     title            - brauzer sarlavhasi
+     operator_css     - sahifaga tegishli qo'shimcha uslublar
+     sidebar          - yon menyu (faol bo'limni ko'rsatish uchun qayta yoziladi)
+     page_title       - yuqori paneldagi sarlavha
+     page_subtitle    - sarlavha ostidagi izoh
+     topbar_right     - soat va ish rejimi kaliti
+     operator_content - sahifa mazmuni
+     operator_modals  - sahifaga tegishli modal oynalar
+     extra_js         - sahifaga tegishli skriptlar
+   ========================================================================== {% endcomment %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Operator paneli{% endblock %} - Nova</title>
+    <link rel="stylesheet" href="{% static 'apps/css/operator.css' %}">
+    {% block operator_css %}{% endblock %}
+</head>
+<body class="op-body">
+
+{% include 'operator/includes/icons.html' %}
+
+<div class="op-shell">
+
+    {% block sidebar %}{% include 'operator/includes/sidebar.html' %}{% endblock %}
+
+    <div class="op-main">
+
+        <header class="op-topbar">
+            <button type="button" class="op-burger" data-op-burger aria-label="Menyu">
+                <svg><use href="#i-menu"/></svg>
+            </button>
+
+            <div class="op-page-title">
+                <h1>{% block page_title %}Operator paneli{% endblock %}</h1>
+                <p>{% block page_subtitle %}{% endblock %}</p>
+            </div>
+
+            <div class="op-topbar-right">
+                {% block topbar_right %}
+                    <div class="op-clock">
+                        <svg><use href="#i-clock"/></svg>
+                        <span data-op-clock>00:00:00</span>
+                    </div>
+                    <button type="button" class="op-switch" data-op-switch>
+                        <span class="op-switch-track"></span>
+                        <span class="op-switch-text">Ish rejimi</span>
+                    </button>
+                {% endblock %}
+            </div>
+        </header>
+
+        <main class="op-content">
+            {% block operator_content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+{% block operator_modals %}{% endblock %}
+
+<div class="op-toasts"></div>
+
+<script src="{% static 'apps/js/operator.js' %}"></script>
+
+{% if messages %}
+    <script>
+        {% for message in messages %}
+            window.Op.toast('{{ message|escapejs }}', {type: '{{ message.tags|default:"info" }}'});
+        {% endfor %}
+    </script>
+{% endif %}
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

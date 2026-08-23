@@ -1,0 +1,203 @@
+{% extends 'base/operator_base.html' %}
+{% load humanize %}
+
+{% block title %}Yangi yetkazmalar{% endblock %}
+
+{% block page_title %}Yangi yetkazmalar{% endblock %}
+{% block page_subtitle %}Yetkazilmoqda holatidagi buyurtmalar - o'zingizga oling{% endblock %}
+
+{% block sidebar %}{% include 'driver/includes/sidebar.html' with active='available' %}{% endblock %}
+
+{% block operator_css %}
+    <style>
+        .dv-address {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            max-width: 340px;
+        }
+
+        .dv-address svg {
+            width: 16px;
+            height: 16px;
+            flex: none;
+            margin-top: 2px;
+            opacity: .55;
+        }
+
+        .dv-address-text {
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .dv-region {
+            display: inline-block;
+            margin-top: 3px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(102, 126, 234, .12);
+            color: #4C51BF;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dv-no-address {
+            color: #A0AEC0;
+            font-style: italic;
+        }
+    </style>
+{% endblock %}
+
+{% block operator_content %}
+    <section class="op-pool-hero">
+        <span class="op-pool-hero-icon"><svg><use href="#i-box"/></svg></span>
+
+        <div class="op-pool-hero-text">
+            <h2>Navbatda <span data-op-count>{{ available_count }}</span> ta yetkazma bor</h2>
+            <p>Olingan buyurtma ro'yxatdan chiqadi va "Mening yetkazmalarim"da ochiladi.</p>
+        </div>
+    </section>
+
+    <section class="op-card">
+
+        <div class="op-toolbar">
+            {# Qidiruv: viloyat tanlovi yo'qolmasligi uchun yashirin maydonda uzatiladi #}
+            <form method="get" class="op-search">
+                <svg><use href="#i-search"/></svg>
+                <input type="search" name="q" placeholder="Mijoz, telefon, manzil yoki buyurtma raqami..."
+                       aria-label="Qidirish" value="{{ request.GET.q|default:'' }}">
+                {% if selected_region %}
+                    <input type="hidden" name="region" value="{{ selected_region }}">
+                {% endif %}
+            </form>
+
+            <form method="get" id="dv-region-form">
+                {% if request.GET.q %}
+                    <input type="hidden" name="q" value="{{ request.GET.q }}">
+                {% endif %}
+                <select class="op-select" name="region" aria-label="Viloyat"
+                        onchange="document.getElementById('dv-region-form').submit()">
+                    <option value="">Barcha viloyatlar</option>
+                    {% for region in regions %}
+                        <option value="{{ region.id }}"
+                                {% if selected_region == region.id|stringformat:"s" %}selected{% endif %}>
+                            {{ region.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            {% if request.GET.q or selected_region %}
+                <a class="btn btn-ghost btn-sm" href="{% url 'driver:available-orders' %}">Tozalash</a>
+            {% endif %}
+
+            <button type="button" class="btn btn-ghost btn-sm" onclick="location.reload()">
+                <svg><use href="#i-refresh"/></svg>
+                Yangilash
+            </button>
+        </div>
+
+        <div class="op-table-wrap">
+            <table class="op-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sana</th>
+                    <th>Mijoz</th>
+                    <th>Mahsulot</th>
+                    <th>Manzil</th>
+                    <th>Soni</th>
+                    <th>Summa</th>
+                    <th>Amallar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td class="cell-id">#{{ order.id }}</td>
+                        <td class="cell-muted num" title="{{ order.created_at|date:'d.m.Y H:i:s' }}">
+                            {{ order.created_at|date:"d.m.Y H:i" }}
+                            <span class="cell-sub">{{ order.created_at|naturaltime }}</span>
+                        </td>
+                        <td>
+                            <span class="cell-strong">{{ order.customer_name }}</span>
+                            <a class="cell-sub num" href="tel:{{ order.phone }}">{{ order.phone }}</a>
+                        </td>
+                        <td>
+                            <span class="cell-clip" title="{{ order.product.name }}">{{ order.product.name }}</span>
+                        </td>
+                        <td>
+                            <div class="dv-address">
+                                <svg><use href="#i-map"/></svg>
+                                <div>
+                                    {% if order.address %}
+                                        <div class="dv-address-text">{{ order.address }}</div>
+                                    {% else %}
+                                        <div class="dv-address-text dv-no-address">Manzil kiritilmagan</div>
+                                    {% endif %}
+                                    {% if order.district %}
+                                        <span class="dv-region">
+                                            {{ order.district.region.title }}, {{ order.district.title }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="num">{{ order.quantity }}</td>
+                        <td class="num cell-strong">{{ order.total_price|intcomma }}</td>
+                        <td>
+                            <div class="cell-actions">
+                                <form method="post" action="{% url 'driver:take-order' order.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <svg><use href="#i-hand"/></svg>
+                                        O'zimga olish
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="op-empty">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.7" y2="16.7"/>
+                            </svg>
+                            <strong>Yetkazish uchun buyurtma yo'q</strong>
+                            {% if request.GET.q or selected_region %}
+                                Filtrni o'zgartiring yoki "Tozalash" tugmasini bosing
+                            {% else %}
+                                Yangi buyurtmalar paydo bo'lganda shu yerda ko'rinadi
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+            <div class="op-pagination">
+                <span class="op-pagination-info">
+                    {{ page_obj.start_index }}-{{ page_obj.end_index }} / jami {{ page_obj.paginator.count }} ta
+                </span>
+                <div class="op-pagination-controls">
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-ghost btn-sm"
+                           href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if selected_region %}&region={{ selected_region }}{% endif %}">
+                            Oldingi
+                        </a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-ghost btn-sm"
+                           href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if selected_region %}&region={{ selected_region }}{% endif %}">
+                            Keyingi
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

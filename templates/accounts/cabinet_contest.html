@@ -1,0 +1,574 @@
+{% extends 'base/dashboard_base.html' %}
+{% load humanize %}
+
+{% block title %}Konkurs{% endblock %}
+
+{% block dashboard_css %}
+<style>
+    /* ---------- Sarlavha ---------- */
+    .competition-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .competition-header h3 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+        color: #1e293b;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    /* Kubok belgisi - gradientli doira ichida */
+    .competition-header i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        color: white;
+        font-size: 22px;
+    }
+
+    /* ---------- Konkurs kartasi ---------- */
+    .competition-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+    }
+
+    .competition-image {
+        display: block;
+        width: 100%;
+        max-height: 320px;
+        object-fit: cover;
+        background: #f8fafc;
+    }
+
+    .competition-content {
+        padding: 25px;
+    }
+
+    .competition-content h3 {
+        margin: 0 0 12px;
+        color: #1e293b;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .competition-content p {
+        margin: 0 0 8px;
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    /* Bo'sh <p> teglar ortiqcha joy egallamasin */
+    .competition-content p:empty {
+        display: none;
+    }
+
+    /* ---------- Sanalar ---------- */
+    .competition-dates {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-top: 22px;
+    }
+
+    .date-card {
+        padding: 16px 18px;
+        border-radius: 14px;
+        border-left: 4px solid;
+        background: #f8fafc;
+    }
+
+    .date-card h5 {
+        margin: 0 0 6px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
+    .date-card p {
+        margin: 0;
+        color: #1e293b;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .date-card.info {
+        border-left-color: #667eea;
+        background: rgba(102, 126, 234, 0.07);
+    }
+
+    .date-card.info h5 {
+        color: #4f46e5;
+    }
+
+    .date-card.danger {
+        border-left-color: #ef4444;
+        background: rgba(239, 68, 68, 0.07);
+    }
+
+    .date-card.danger h5 {
+        color: #b91c1c;
+    }
+
+    /* ---------- Qolgan vaqt (JS to'ldiradi) ---------- */
+    .countdown {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .countdown-label {
+        margin-right: auto;
+        font-size: 13px;
+        font-weight: 600;
+        opacity: 0.9;
+    }
+
+    .countdown-box {
+        min-width: 62px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.18);
+        text-align: center;
+    }
+
+    .countdown-box b {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .countdown-box span {
+        font-size: 11px;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        opacity: 0.85;
+    }
+
+    /* Konkurs tugagan holat - qutilar o'rniga bitta matn ko'rinadi */
+    .countdown.is-finished {
+        background: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+    }
+
+    /* ---------- Natijalar kartasi ---------- */
+    .results-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .results-header h5 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        color: #1e293b;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .results-header i {
+        color: #667eea;
+    }
+
+    .cache-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 14px 0 18px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .cache-info i {
+        color: #94a3b8;
+    }
+
+    /* ---------- Reyting jadvali ---------- */
+    .results-table {
+        overflow-x: auto;
+        border: 1px solid #eef2f7;
+        border-radius: 14px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-modern {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .table-modern th,
+    .table-modern td {
+        padding: 14px 18px;
+        border-bottom: 1px solid #eef2f7;
+        white-space: nowrap;
+    }
+
+    .table-modern thead th {
+        background: #f8fafc;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+
+    /* 1-ustun tor, oxirgi ustun o'ngga tekislangan - raqamlar ustma-ust tushadi */
+    .table-modern th:first-child,
+    .table-modern td:first-child {
+        width: 70px;
+    }
+
+    .table-modern th:last-child,
+    .table-modern td:last-child {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .table-modern tbody td {
+        color: #1e293b;
+    }
+
+    .table-modern tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table-modern tbody tr:hover td {
+        background: #f8fafc;
+    }
+
+    /* Joriy foydalanuvchining qatori ajralib tursin */
+    .table-modern tbody tr.is-me td {
+        background: rgba(102, 126, 234, 0.08);
+        font-weight: 600;
+    }
+
+    .seller-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: normal;
+    }
+
+    .me-badge {
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: #667eea;
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+
+    .sold-count {
+        color: #059669;
+        font-weight: 700;
+    }
+
+    /* ---------- O'rin belgisi ---------- */
+    .rank {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* Birinchi uchtalik - oltin, kumush, bronza */
+    .rank.rank-1 {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .rank.rank-2 {
+        background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+        color: white;
+    }
+
+    .rank.rank-3 {
+        background: linear-gradient(135deg, #f0a67a 0%, #c2703f 100%);
+        color: white;
+    }
+
+    .results-empty {
+        padding: 40px 20px;
+        color: #94a3b8;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    /* ---------- Sahifalash ---------- */
+    .pagination-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .pagination-info {
+        padding: 0 10px;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .pagination-btn {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        background: white;
+        color: #64748b;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .pagination-btn:hover {
+        border-color: #667eea;
+        background: #f8fafc;
+        color: #667eea;
+        text-decoration: none;
+    }
+
+    @media (max-width: 767px) {
+        .competition-content,
+        .results-card {
+            padding: 16px;
+        }
+
+        .competition-dates {
+            grid-template-columns: 1fr;
+        }
+
+        .countdown-label {
+            width: 100%;
+            margin-right: 0;
+        }
+
+        .table-modern th,
+        .table-modern td {
+            padding: 12px 14px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block dashboard_content %}
+    <div class="competition-header">
+        <h3>
+            <i class="icofont-trophy-alt"></i>
+            Konkurs
+        </h3>
+    </div>
+
+    <div class="competition-card">
+        <img class="competition-image" src="/media/competition/competetion.png" alt="Nova">
+
+        <div class="competition-content">
+            <h3>Nova</h3>
+            <p>Nova jamoasidan bomba konkurs.</p>
+            <p>Vaqtingizdan unumli foydalaning va bizning jamoamizga qo'shiling va yil admini bo'lish imkoniyatidan
+                foydalaning</p>
+
+            <div class="competition-dates">
+                <div class="date-card info">
+                    <h5>Boshlash</h5>
+                    <p>20-Dekabr, 2025-yil</p>
+                </div>
+                <div class="date-card danger">
+                    <h5>Yakunlash</h5>
+                    <p>20-Dekabr, 2026-yil</p>
+                </div>
+            </div>
+
+            <div class="countdown" id="contest-countdown" data-deadline="2026-12-20T00:00:00">
+                <span class="countdown-label">Konkurs yakunlanishiga qoldi</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-card">
+        <div class="results-header">
+            <h5>
+                <i class="icofont-chart-bar-graph"></i>
+                Konkurs natijalari
+            </h5>
+        </div>
+
+        <div class="cache-info">
+            <i class="icofont-clock-time"></i>
+            <span>Ma'lumotlar har 12 soatda yangilanadi</span>
+        </div>
+
+        <div class="results-table">
+            <table class="table-modern">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Sotuvchi</th>
+                    <th>Sotilgan</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% with start=page_obj.start_index|default:1 %}
+                    {% for seller in sellers %}
+                        {% with rank=forloop.counter0|add:start %}
+                            <tr {% if seller.pk == request.user.pk %}class="is-me"{% endif %}>
+                                <td><span class="rank rank-{{ rank }}">{{ rank }}</span></td>
+                                <td>
+                                    <div class="seller-name">
+                                        {{ seller.display_name }}
+                                        {% if seller.pk == request.user.pk %}
+                                            <span class="me-badge">Siz</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td><span class="sold-count">{{ seller.sold|intcomma }}</span></td>
+                            </tr>
+                        {% endwith %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="results-empty">Natijalar hozircha e'lon qilinmagan</td>
+                        </tr>
+                    {% endfor %}
+                {% endwith %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+            <div class="pagination-container">
+                {% if page_obj.has_previous %}
+                    <a class="pagination-btn" title="Birinchi sahifa" href="{% querystring page=1 %}">
+                        <i class="icofont-double-left"></i>
+                    </a>
+                    <a class="pagination-btn" title="Oldingi sahifa"
+                       href="{% querystring page=page_obj.previous_page_number %}">
+                        <i class="icofont-simple-left"></i>
+                    </a>
+                {% endif %}
+
+                <span class="pagination-info">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+
+                {% if page_obj.has_next %}
+                    <a class="pagination-btn" title="Keyingi sahifa"
+                       href="{% querystring page=page_obj.next_page_number %}">
+                        <i class="icofont-simple-right"></i>
+                    </a>
+                    <a class="pagination-btn" title="Oxirgi sahifa"
+                       href="{% querystring page=paginator.num_pages %}">
+                        <i class="icofont-double-right"></i>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    (function () {
+        const box = document.getElementById('contest-countdown');
+
+        if (!box) {
+            return;
+        }
+
+        const deadline = new Date(box.dataset.deadline).getTime();
+
+        // Sana noto'g'ri yozilgan bo'lsa hisoblagichni umuman ko'rsatmaymiz
+        if (isNaN(deadline)) {
+            box.style.display = 'none';
+            return;
+        }
+
+        const label = box.querySelector('.countdown-label');
+        const units = [
+            {suffix: 'kun', divisor: 86400000},
+            {suffix: 'soat', divisor: 3600000},
+            {suffix: 'daqiqa', divisor: 60000},
+            {suffix: 'soniya', divisor: 1000},
+        ];
+
+        // Har bir birlik uchun bitta quti yasaymiz, keyin faqat raqamini yangilaymiz
+        const values = units.map(function (unit) {
+            const el = document.createElement('div');
+
+            el.className = 'countdown-box';
+            el.innerHTML = '<b>0</b><span>' + unit.suffix + '</span>';
+            box.appendChild(el);
+
+            return el.querySelector('b');
+        });
+
+        function render() {
+            let left = deadline - Date.now();
+
+            if (left <= 0) {
+                // Muddat tugadi - qutilarni olib tashlab, o'rniga xabar qoldiramiz
+                values.forEach(function (value) {
+                    value.parentElement.remove();
+                });
+                box.classList.add('is-finished');
+                label.textContent = 'Konkurs yakunlandi';
+                clearInterval(timer);
+                return;
+            }
+
+            units.forEach(function (unit, i) {
+                const amount = Math.floor(left / unit.divisor);
+
+                left -= amount * unit.divisor;
+                values[i].textContent = amount;
+            });
+        }
+
+        const timer = setInterval(render, 1000);
+
+        render();
+    })();
+</script>
+{% endblock %}

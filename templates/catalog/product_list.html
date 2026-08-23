@@ -1,0 +1,182 @@
+{% extends "base/site_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'apps/css/product_by_category_style.css' %}">
+{% endblock %}
+
+{% block title %}
+    {% if category %}{{ category.name }} — {% endif %}Nova
+{% endblock %}
+
+{% block content %}
+<section class="products-listing-page py-4">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Sidebar Categories -->
+            <div class="col-lg-3">
+                <aside class="sidebar-filters">
+                    <div class="filter-card">
+                        <div class="filter-header" id="filterToggleBtn">
+                            <h5 class="filter-title">
+                                <img width="20" height="20" src="https://img.icons8.com/ios/50/filter--v1.png" alt="filter--v1"/>
+                                Kategoriyalar
+                            </h5>
+                            <button class="mobile-toggle-btn d-lg-none" type="button">
+                                <i class="icofont-rounded-down"></i>
+                            </button>
+                        </div>
+                        <div class="filter-body collapsed" id="filterBody">
+                            <nav class="categories-nav">
+                                {% for cat in categories %}
+                                <a href="{% url 'catalog:category-detail' cat.slug %}" class="category-link {% if category and category.slug == cat.slug %}active{% endif %}">
+                                    <span class="category-name">{{ cat.name }}</span>
+                                    <img width="10" height="10" src="https://img.icons8.com/ios/50/forward--v1.png" alt="forward--v1"/>
+                                </a>
+                                {% endfor %}
+                            </nav>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Breadcrumb & Title -->
+                <div class="page-header mb-4">
+                    <div class="breadcrumb-wrapper">
+                        <a href="{% url 'catalog:home' %}" class="breadcrumb-link">
+                            <img width="20" height="20" src="https://img.icons8.com/material-outlined/24/home-page.png" alt="home-page"/>
+                            Bosh sahifa
+                        </a>
+                        <span class="breadcrumb-separator">
+                            <img width="10" height="10" src="https://img.icons8.com/ios/50/forward--v1.png" alt="forward--v1"/>
+                        </span>
+                        <span class="breadcrumb-current">
+                            {% if category %}{{ category.name }}{% else %}Barchasi{% endif %}
+                        </span>
+                    </div>
+
+                    <h1 class="page-title">
+                        {% if category %}{{ category.name }}{% else %}Barcha mahsulotlar{% endif %}
+                    </h1>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid">
+                    <div class="row g-3">
+                        {% for product in products %}
+                        <div class="col-6 col-md-4">
+                            <div class="product-card">
+                                <a href="{% url 'catalog:product-detail' slug=product.slug %}" class="product-image-link">
+                                    <div class="product-image-wrapper">
+                                        <img src="{{ product.thumbnail.image.url }}" class="product-image" alt="{{ product.name }}" loading="lazy">
+                                    </div>
+                                </a>
+                                <div class="product-info">
+                                    <h6 class="product-title">
+                                        <a href="{% url 'catalog:product-detail' slug=product.slug %}">
+                                            {{ product.name }}
+                                        </a>
+                                    </h6>
+                                    <p class="product-price">
+                                        {{ product.price|intcomma }} so'm
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">Mahsulotlar topilmadi.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <div class="pagination-wrapper mt-5">
+                    <nav aria-label="Sahifalar navigatsiyasi">
+                        <ul class="custom-pagination">
+                            <!-- Previous Button -->
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Oldingi">
+                                    <img width="20" height="20" src="https://img.icons8.com/ios-glyphs/30/228BE6/back.png" alt="back"/>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/228BE6/forward--v1.png" alt="forward--v1"/>
+                                </span>
+                            </li>
+                            {% endif %}
+
+                            <!-- Page Numbers -->
+                            {% for num in page_obj.paginator.page_range %}
+                            <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endfor %}
+
+                            <!-- Next Button -->
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Keyingi">
+                                    <i class="icofont-rounded-right"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <i class="icofont-rounded-right"></i>
+                                </span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Mobile filter toggle
+        const filterHeader = document.getElementById('filterToggleBtn');
+        const filterBody = document.getElementById('filterBody');
+        const toggleBtn = filterHeader.querySelector('.mobile-toggle-btn');
+
+        if (window.innerWidth < 992) {
+            filterBody.classList.add('collapsed');
+
+            filterHeader.addEventListener('click', function () {
+                filterBody.classList.toggle('collapsed');
+                filterBody.classList.toggle('show');
+
+                if (toggleBtn) {
+                    toggleBtn.classList.toggle('active');
+                }
+            });
+        }
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth >= 992) {
+                filterBody.classList.remove('collapsed');
+                filterBody.classList.remove('show');
+                if (toggleBtn) {
+                    toggleBtn.classList.remove('active');
+                }
+            } else {
+                if (!filterBody.classList.contains('show')) {
+                    filterBody.classList.add('collapsed');
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

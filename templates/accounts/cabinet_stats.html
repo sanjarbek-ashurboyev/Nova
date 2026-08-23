@@ -1,0 +1,391 @@
+{% extends 'base/dashboard_base.html' %}
+{% load humanize %}
+
+{% block title %}Statistika{% endblock %}
+
+{% block dashboard_css %}
+<style>
+    /* ---------- Umumiy karta ---------- */
+    .stats-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ---------- Tab almashtirgich ---------- */
+    .tab-switcher {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .tab-btn {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        height: 42px;
+        padding: 0 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .tab-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+    }
+
+    .tab-btn.active {
+        border-color: transparent;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    /* ---------- Oq jadval ---------- */
+    /* 14 ta ustun bor - shuning uchun o'ram gorizontal scroll qiladi */
+    .stats-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid #eef2f7;
+        border-radius: 14px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .stats-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .stats-table th,
+    .stats-table td {
+        padding: 12px 14px;
+        text-align: center;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .stats-table thead th {
+        background: #f8fafc;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        line-height: 1.4;
+    }
+
+    /* Birinchi ustun scroll paytida joyida qoladi, aks holda qator kimniki ekani bilinmaydi */
+    .stats-table th:first-child,
+    .stats-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        text-align: left;
+        background: white;
+    }
+
+    .stats-table thead th:first-child {
+        z-index: 2;
+        background: #f8fafc;
+    }
+
+    .total-row-header td {
+        background: #eef2ff;
+        color: #3730a3;
+        font-size: 13px;
+    }
+
+    .stats-table tbody th {
+        color: #667eea;
+        font-weight: 700;
+    }
+
+    .stats-table tbody td {
+        color: #1e293b;
+    }
+
+    .stats-table tbody tr:hover th,
+    .stats-table tbody tr:hover td {
+        background: #f8fafc;
+    }
+
+    .stats-table tbody small {
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    .stats-empty {
+        padding: 40px 20px;
+        color: #94a3b8;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    /* ---------- Sahifalash ---------- */
+    .pagination-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .pagination-info {
+        padding: 0 10px;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .pagination-btn {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        background: white;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .pagination-btn:hover {
+        border-color: #667eea;
+        background: #f8fafc;
+        color: #667eea;
+    }
+
+    /* ---------- Qora jadval (Sana tabi) ---------- */
+    .dark-scroll-wrap {
+        overflow-x: auto;
+        border-radius: 14px;
+        background: #1e293b;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .dark-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+        color: #e2e8f0;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .dark-table .ch {
+        padding: 12px 14px;
+        background: #0f172a;
+        color: #94a3b8;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.4;
+        border-bottom: 1px solid #334155;
+    }
+
+    .dark-table .name-col {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        text-align: left;
+    }
+
+    .dark-table td {
+        padding: 12px 14px;
+        text-align: center;
+        border-bottom: 1px solid #334155;
+    }
+
+    .dark-empty {
+        padding: 40px 20px;
+        color: #94a3b8;
+        font-size: 14px;
+    }
+
+    @media (max-width: 767px) {
+        .stats-card {
+            padding: 16px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            justify-content: center;
+            padding: 0 12px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block dashboard_content %}
+	<div class="stats-card">
+
+{#                    <div class="tab-switcher">#}
+{#                        <button class="tab-btn active" data-tab="table">#}
+{#                            <i class="icofont-table"></i> Oqim#}
+{#                        </button>#}
+{#                        <button class="tab-btn" data-tab="dark">#}
+{#                            <i class="icofont-calendar"></i> Sana#}
+{#                        </button>#}
+{#                    </div>#}
+
+                    <div id="tab-table" style="">
+                    <div class="stats-table-wrapper">
+                        <table class="stats-table">
+                            <thead>
+                            <tr>
+                                <th>Oqim</th>
+                                <th>Mahsulot</th>
+                                <th>Tashrif</th>
+                                <th>Yangi</th>
+                                <th>Dostavka<br>Bugun/Keyin</th>
+                                <th>Qadoqlash</th>
+                                <th>Yetkazilmoqda</th>
+                                <th>Yetkazildi</th>
+                                <th>Keyin oladi</th>
+                                <th>Qaytib keldi</th>
+                                <th>Bekor qilindi</th>
+                                <th>Hold</th>
+                                <th>Arxiv</th>
+                                <th>Yetkazildi<br>soni</th>
+                            </tr>
+                            <tr class="total-row-header">
+                                <td><strong>JAMI</strong></td>
+                                <td></td>
+                                <td><strong>{{ totals.visit_count }}</strong></td>
+                                <td><strong>{{ totals.new_count }}</strong></td>
+                                <td><strong>0/0</strong></td>
+                                <td><strong>{{ totals.packaging_count }}</strong></td>
+                                <td><strong>{{ totals.shipping_count }}</strong></td>
+                                <td><strong>{{ totals.delivered_count }}</strong></td>
+                                <td><strong>{{ totals.pickup_later_count }}</strong></td>
+                                <td><strong>{{ totals.returned_count }}</strong></td>
+                                <td><strong>{{ totals.cancelled_count }}</strong></td>
+                                <td><strong>{{ totals.hold_count }}</strong></td>
+                                <td><strong>{{ totals.archive_count }}</strong></td>
+                                <td><strong>{{ totals.delivered_sum|intcomma }}</strong></td>
+                            </tr>
+                            </thead>
+                                <tbody id="streams-tbody">
+                                {% for thread in threads %}
+                                <tr>
+                                    <th>{{ thread.id }}</th>
+                                    <td>{{ thread.product.name }}<br>{{ thread.name }}</td>
+                                    <td>{{ thread.visit_count }}</td>
+                                    <td>{{ thread.new_count }}</td>
+                                    <td>0/0</td>
+                                    <td>{{ thread.packaging_count }}</td>
+                                    <td>{{ thread.shipping_count }}</td>
+                                    <td>{{ thread.delivered_count }}</td>
+                                    <td>{{ thread.pickup_later_count }}</td>
+                                    <td>{{ thread.returned_count }}</td>
+                                    <td>{{ thread.cancelled_count }}</td>
+                                    <td>{{ thread.hold_count }}</td>
+                                    <td>{{ thread.archive_count }}</td>
+                                    <td>
+                                        {{ thread.delivered_sum|intcomma }}<br>
+                                        <small>({{ thread.delivered_qty }} x {{ thread.unit_profit|intcomma }})</small>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="14" class="stats-empty">Hozircha oqimlaringiz yo'q</td>
+                                </tr>
+                                {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {% if is_paginated %}
+                    <div id="table-pagination">
+
+                        <div class="pagination-container">
+
+                            {% if page_obj.has_previous %}
+                                <button type="button" class="pagination-btn" title="Birinchi sahifa"
+                                        onclick="window._fetchPage(1)"><i class="icofont-double-left"></i></button>
+                                <button type="button" class="pagination-btn" title="Oldingi sahifa"
+                                        onclick="window._fetchPage({{ page_obj.previous_page_number }})"><i class="icofont-simple-left"></i></button>
+                            {% endif %}
+
+                            <span class="pagination-info">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+
+                            {% if page_obj.has_next %}
+                                <button type="button" class="pagination-btn" title="Keyingi sahifa"
+                                        onclick="window._fetchPage({{ page_obj.next_page_number }})"><i class="icofont-simple-right"></i></button>
+                                <button type="button" class="pagination-btn" title="Oxirgi sahifa"
+                                        onclick="window._fetchPage({{ paginator.num_pages }})"><i class="icofont-double-right"></i></button>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                    {% endif %}
+                    </div>
+
+                    <div id="tab-dark" style="display: none;">
+                        <div id="dark-app"><div class="dark-scroll-wrap"><table class="dark-table"><thead><tr><th class="ch name-col">Oqim</th><th class="ch">Yangi</th><th class="ch">Dostavka<br>Bugun/Keyin</th><th class="ch">Qadoqlash</th><th class="ch">Yetkazilmoqda</th><th class="ch">Yetkazildi</th><th class="ch">Keyin oladi</th><th class="ch">Qaytib keldi</th><th class="ch">Bekor qilindi</th><th class="ch">Hold</th><th class="ch">Arxiv</th><th class="ch">Yetkazildi<br>soni</th><th class="ch">Summa</th></tr></thead><tbody id="dark-blocks"><tr><td colspan="13" class="dark-empty">Ma'lumot topilmadi</td></tr></tbody></table></div><div id="dark-pagination"></div></div>
+                    </div>
+                </div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    (function () {
+        const buttons = document.querySelectorAll('.tab-switcher .tab-btn');
+
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                buttons.forEach(function (other) {
+                    const isActive = other === btn;
+                    const panel = document.getElementById('tab-' + other.dataset.tab);
+
+                    other.classList.toggle('active', isActive);
+                    if (panel) {
+                        panel.style.display = isActive ? '' : 'none';
+                    }
+                });
+            });
+        });
+
+        // Sahifalash tugmalari shu funksiyani chaqiradi.
+        // Manzilga ?page=N qo'shadi, qolgan GET parametrlar (qidiruv, filtr) saqlanadi.
+        window._fetchPage = function (page) {
+            const url = new URL(window.location.href);
+
+            url.searchParams.set('page', page);
+            window.location.assign(url.toString());
+        };
+    })();
+</script>
+{% endblock %}

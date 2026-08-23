@@ -1,0 +1,910 @@
+{% extends "base/site_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Faqat shu sahifaning bo'limlari kengaytiriladi; sarlavha va futer
+           boshqa sahifalardagi kabi Bootstrap kengligida (1140px) qoladi */
+        .inner-header .container,
+        .shop-single .container,
+        .shop-single-detail .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-showcase-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        .product-showcase-container {
+            overflow: hidden;
+            height: 600px;
+        }
+
+        .product-showcase-carousel {
+            display: flex;
+            height: 100%;
+            transition: none;
+        }
+
+        .product-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        /* Left side - Text content */
+        .product-info {
+            flex: 1;
+            background: #2c2c2c;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .product-title {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .product-features li {
+            color: white;
+            font-size: 20px;
+            font-weight: 500;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .product-features li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        /* Right side - Product image */
+        .product-image-container {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .product-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Navigation Buttons */
+        .product-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .product-nav-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-nav-btn:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .product-nav-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: #333;
+        }
+
+        /* Dots Navigation */
+        .product-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .product-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .product-dot.active {
+            background: white;
+            width: 35px;
+            border-radius: 6px;
+        }
+
+        .product-dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .product-slide {
+                flex-direction: column;
+            }
+
+            .product-showcase-container {
+                height: auto;
+            }
+
+            .product-info,
+            .product-image-container {
+                flex: none;
+                width: 100%;
+            }
+
+            .product-info {
+                padding: 40px;
+            }
+
+            .product-title {
+                font-size: 48px;
+            }
+
+            .product-features li {
+                font-size: 18px;
+            }
+
+            .product-image-container {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-info {
+                padding: 30px;
+            }
+
+            .product-title {
+                font-size: 36px;
+                margin-bottom: 30px;
+            }
+
+            .product-features li {
+                font-size: 16px;
+                padding: 15px 0;
+            }
+
+            .product-image-container {
+                min-height: 300px;
+                padding: 30px;
+            }
+        }
+
+        /* ===== Buyurtma qabul qilindi ===== */
+        .order-accepted-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 30, 0.65);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1080;
+            animation: oaFadeIn 0.3s ease;
+        }
+
+        .order-accepted-overlay.is-hidden {
+            display: none;
+        }
+
+        @keyframes oaFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .order-accepted-card {
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            background: white;
+            border-radius: 20px;
+            padding: 45px 35px 35px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            animation: oaPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes oaPopIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .order-accepted-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: #f1f1f4;
+            color: #666;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .order-accepted-close:hover {
+            background: #e2e2e8;
+            color: #222;
+        }
+
+        .order-accepted-icon {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .order-accepted-icon svg {
+            width: 52px;
+            height: 52px;
+        }
+
+        .oa-circle {
+            stroke: rgba(255, 255, 255, 0.55);
+            stroke-width: 2;
+            stroke-dasharray: 151;
+            stroke-dashoffset: 151;
+            animation: oaDraw 0.6s ease-out 0.15s forwards;
+        }
+
+        .oa-check {
+            stroke: white;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 40;
+            stroke-dashoffset: 40;
+            animation: oaDraw 0.4s ease-out 0.55s forwards;
+        }
+
+        @keyframes oaDraw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .order-accepted-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .order-accepted-text {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .order-accepted-summary {
+            text-align: left;
+            background: #f8f9fb;
+            border: 1px solid #eceef3;
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 25px;
+        }
+
+        .oa-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 9px 0;
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .oa-row + .oa-row {
+            border-top: 1px dashed #e2e5ec;
+        }
+
+        .oa-row dt {
+            color: #6b7280;
+            font-weight: 500;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .oa-row dd {
+            color: #1f2937;
+            font-weight: 600;
+            margin: 0;
+            text-align: right;
+        }
+
+        .oa-row.oa-total dd {
+            color: #764ba2;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .order-accepted-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .oa-btn {
+            flex: 1;
+            padding: 13px 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .oa-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+        }
+
+        .oa-btn-primary:hover {
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 24px rgba(102, 126, 234, 0.45);
+        }
+
+        .oa-btn-ghost {
+            background: #f1f1f4;
+            color: #374151;
+        }
+
+        .oa-btn-ghost:hover {
+            background: #e5e5ea;
+            color: #111827;
+        }
+
+        @media (max-width: 480px) {
+            .order-accepted-card {
+                padding: 38px 22px 26px;
+            }
+
+            .order-accepted-title {
+                font-size: 22px;
+            }
+
+            .order-accepted-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <section class="py-2  inner-header">
+        <div class="container">
+            <div class="row d-flex align-items-center">
+                <div class="col-lg-12">
+                    <div class="breadcrumbs">
+                        <p class="mb-0"><a href="{% url 'catalog:home' %}"><span></span>
+                            <img width="20" height="20" src="https://img.icons8.com/material-outlined/24/home-page.png" alt="home-page"/>
+                            Bosh sahifa</a>
+                            <span></span>
+                            <img width="10" height="10" src="https://img.icons8.com/ios/50/forward--v1.png" alt="forward--v1"/>
+                            <a href="{% url 'catalog:category-detail' slug=category.slug %}">{{ category.name }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% if accepted_order %}
+        <div class="order-accepted-overlay" id="orderAcceptedOverlay" role="dialog" aria-modal="true"
+             aria-labelledby="orderAcceptedTitle">
+            <div class="order-accepted-card">
+                <button type="button" class="order-accepted-close" id="orderAcceptedClose" aria-label="Yopish">
+                    &times;
+                </button>
+
+                <div class="order-accepted-icon">
+                    <svg viewBox="0 0 52 52" aria-hidden="true">
+                        <circle class="oa-circle" cx="26" cy="26" r="24" fill="none"/>
+                        <path class="oa-check" fill="none" d="M14 27l8 8 16-16"/>
+                    </svg>
+                </div>
+
+                <h3 class="order-accepted-title" id="orderAcceptedTitle">Buyurtmangiz qabul qilindi!</h3>
+                <p class="order-accepted-text">
+                    Rahmat, <strong>{{ accepted_order.customer_name }}</strong>!<br>
+                    Operatorlarimiz <strong>{{ accepted_order.phone }}</strong> raqami orqali
+                    tez orada siz bilan bog'lanishadi.
+                </p>
+
+                <dl class="order-accepted-summary">
+                    <div class="oa-row">
+                        <dt>Buyurtma raqami</dt>
+                        <dd>#{{ accepted_order.pk }}</dd>
+                    </div>
+                    <div class="oa-row">
+                        <dt>Mahsulot</dt>
+                        <dd>{{ accepted_order.product.name }}</dd>
+                    </div>
+                    <div class="oa-row">
+                        <dt>Soni</dt>
+                        <dd>{{ accepted_order.quantity }} dona</dd>
+                    </div>
+                    <div class="oa-row">
+                        <dt>Holati</dt>
+                        <dd>{{ accepted_order.get_status_display }}</dd>
+                    </div>
+                    <div class="oa-row">
+                        <dt>Sana</dt>
+                        <dd>{{ accepted_order.created_at|date:"d.m.Y H:i" }}</dd>
+                    </div>
+                    <div class="oa-row oa-total">
+                        <dt>Jami</dt>
+                        <dd>{{ accepted_order.total_price|intcomma|cut:' ' }} so'm</dd>
+                    </div>
+                </dl>
+
+                <div class="order-accepted-actions">
+                    <a class="oa-btn oa-btn-primary" href="{% url 'catalog:home' %}">Bosh sahifa</a>
+                    <button type="button" class="oa-btn oa-btn-ghost" id="orderAcceptedContinue">
+                        Xaridni davom ettirish
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <section class="py-5 shop-single bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-showcase-wrapper">
+                        <div class="product-showcase-container">
+                            <div class="product-showcase-carousel" id="productCarousel">
+                                {% for image in product.images.all %}
+                                    <div class="product-slide">
+                                        <div class="product-image-container"
+                                             style="background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);">
+                                            <div style="font-size: 200px; color: white; opacity: 0.9;"><img
+                                                    class="product-image"
+                                                    src="{{ image.image.url }}"
+                                                    alt="ZQS 8302 kotta kalonka"
+                                                    loading="lazy"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="product-nav">
+                            <button class="product-nav-btn" id="productPrevBtn">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                </svg>
+                            </button>
+                            <button class="product-nav-btn" id="productNextBtn">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Dots Navigation -->
+                        <div class="product-dots" id="productDots"></div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="shop-detail-right">
+                        <div class="border rounded shadow-sm bg-white p-4">
+                            <div class="product-name">
+                                <h2>{{ product.name }}</h2>
+                            </div>
+                            <div class="price-box">
+                                <h5>
+
+                                    <span class="product-price text-danger"
+                                          id="dynamic-price">{{ price|intcomma|cut:' ' }} so'm</span>
+
+                                </h5>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="product-variation">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+
+                                    {% if form.errors %}
+                                        <div class="alert alert-danger" role="alert">
+                                            <ul class="mb-0 pl-3">
+                                                {% for field in form %}
+                                                    {% for error in field.errors %}
+                                                        <li>{{ error }}</li>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                {% for error in form.non_field_errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="controls">
+                                        <label>Ism <span class="text-danger">*</span></label>
+                                        <input type="text" placeholder="Ism" class="form-control" name="fullname"
+                                               value="{{ form.fullname.value|default_if_none:'' }}"
+                                               required="" maxlength="200" pattern="^[a-zA-Z0-9\sа-яА-ЯёЁўЎқҚғҒҳҲ]+$"
+                                               oninput="this.value = this.value.replace(/[^a-zA-Z0-9\sа-яА-ЯёЁўЎқҚғҒҳҲ]/g, '')"
+                                               title="Faqat harf va raqam kiritish mumkin">
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="controls">
+                                        <label>Telefon <span class="text-danger">*</span></label>
+                                        <input type="text" placeholder="+998 90 123 45 67" class="form-control"
+                                               id="order-phone-mask" required="" name="phone_number"
+                                               value="{{ form.phone_number.value|default_if_none:'' }}">
+                                        <input type="hidden" value="{{ product.id }}" name="product">
+                                        <p class="help-block"></p>
+                                    </div>
+
+
+                                    <label for="quantity">Soni :</label>
+                                    <select name="quantity" id="quantity" data-select2-id="quantity" tabindex="-1"
+                                            class="select2-hidden-accessible" aria-hidden="true"
+                                            {% if not in_stock %}disabled{% endif %}>
+                                        {% for n in quantity_choices %}
+                                            <option value="{{ n }}"{% if n == 1 %} data-select2-id="2"{% endif %}>{{ n }}</option>
+                                        {% empty %}
+                                            <option value="">—</option>
+                                        {% endfor %}
+                                    </select><span class="select2 select2-container select2-container--default"
+                                                   dir="ltr" data-select2-id="1" style="width: 30.5px;"><span
+                                        class="selection"><span class="select2-selection select2-selection--single"
+                                                                role="combobox" aria-haspopup="true"
+                                                                aria-expanded="false" tabindex="0"
+                                                                aria-labelledby="select2-quantity-container"><span
+                                        class="select2-selection__rendered" id="select2-quantity-container"
+                                        role="textbox" aria-readonly="true" title="1">1</span><span
+                                        class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span
+                                        class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                    <span class="float-right">
+                              {% if in_stock %}
+                              <button type="submit" class="btn btn-primary btn-lg">&nbsp;&nbsp;&nbsp; <img width="25" height="25" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/shopping-cart--v1.png" alt="shopping-cart--v1"/><i
+                                      ></i> Buyurtma berish &nbsp;&nbsp;&nbsp;</button>
+                              {% else %}
+                              <button type="button" class="btn btn-secondary btn-lg" disabled>
+                                  &nbsp;&nbsp;&nbsp; Omborda yo'q &nbsp;&nbsp;&nbsp;</button>
+                              {% endif %}
+                              </span>
+                                </form>
+                            </div>
+                            Yetkazib berish O'zbekiston bo'ylab 30 000 so'm
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="det" class="pb-5 pt-0 shop-single-detail bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="rounded shadow-sm bg-white">
+                        <ul class="nav nav-pills p-3" id="pills-tab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" id="pills-home-tab" data-toggle="pill"
+                                                    href="#pills-home" role="tab" aria-controls="pills-home"
+                                                    aria-selected="true">Batafsil</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content p-4 border-top" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                 aria-labelledby="pills-home-tab">
+                                {{ product.description }}
+
+                                <p>Oʻzbekiston boʻylab yetkazib berish xizmati mavjud</p>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const productCarousel = document.getElementById('productCarousel');
+        const productPrevBtn = document.getElementById('productPrevBtn');
+        const productNextBtn = document.getElementById('productNextBtn');
+        const productDotsContainer = document.getElementById('productDots');
+
+        const slides = productCarousel.querySelectorAll('.product-slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+        let autoPlayInterval;
+        let isAnimating = false;
+
+        // Create dots
+        function createDots() {
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('product-dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                productDotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update dots
+        function updateDots() {
+            const dots = productDotsContainer.querySelectorAll('.product-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        // Go to specific slide
+        function goToSlide(slideIndex, smooth = true) {
+            if (isAnimating) return;
+
+            isAnimating = true;
+            currentSlide = slideIndex;
+
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+
+            if (smooth) {
+                productCarousel.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+            } else {
+                productCarousel.style.transition = 'none';
+            }
+
+            productCarousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            updateDots();
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 700);
+        }
+
+        // Next slide
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        // Previous slide
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+
+        // Auto play
+        function startAutoPlay() {
+            stopAutoPlay();
+            autoPlayInterval = setInterval(nextSlide, 5000); // 5 seconds
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+            }
+        }
+
+        // Event listeners
+        productNextBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            nextSlide();
+            startAutoPlay();
+        });
+
+        productPrevBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            prevSlide();
+            startAutoPlay();
+        });
+
+        // Pause on hover
+        productCarousel.parentElement.addEventListener('mouseenter', stopAutoPlay);
+        productCarousel.parentElement.addEventListener('mouseleave', startAutoPlay);
+
+        // Touch/Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        productCarousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            stopAutoPlay();
+        });
+
+        productCarousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+            startAutoPlay();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                prevSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                stopAutoPlay();
+                prevSlide();
+                startAutoPlay();
+            }
+            if (e.key === 'ArrowRight') {
+                stopAutoPlay();
+                nextSlide();
+                startAutoPlay();
+            }
+        });
+
+        // Initialize
+        createDots();
+        startAutoPlay();
+
+        // Telefon maskasi (base.html dagi modal bilan id to'qnashmasligi uchun alohida)
+        if (window.jQuery && jQuery.fn.inputmask) {
+            jQuery('#order-phone-mask').inputmask({"mask": "+\\9\\98(99) 999-99-99"});
+        }
+
+        // ===== Buyurtma qabul qilindi oynasi =====
+        const orderAcceptedOverlay = document.getElementById('orderAcceptedOverlay');
+
+        if (orderAcceptedOverlay) {
+            const closeOrderAccepted = () => {
+                orderAcceptedOverlay.classList.add('is-hidden');
+                document.body.style.overflow = '';
+            };
+
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('orderAcceptedClose').addEventListener('click', closeOrderAccepted);
+            document.getElementById('orderAcceptedContinue').addEventListener('click', closeOrderAccepted);
+
+            // Fon bosilganda yopish
+            orderAcceptedOverlay.addEventListener('click', (e) => {
+                if (e.target === orderAcceptedOverlay) closeOrderAccepted();
+            });
+
+            // Esc tugmasi
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeOrderAccepted();
+            });
+        }
+    </script>
+{% endblock %}

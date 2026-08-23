@@ -1,0 +1,435 @@
+{% extends 'base/dashboard_base.html' %}
+{% load humanize %}
+
+{% block title %}To'lov{% endblock %}
+
+{% block dashboard_css %}
+<style>
+    /* ---------- Umumiy karta ---------- */
+    .payment-card {
+        background: white;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    /* ---------- Hisob (balans) ---------- */
+    .balance-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        padding: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .balance-card h5 {
+        margin: 14px 0 6px;
+        font-size: 15px;
+        font-weight: 600;
+        opacity: 0.9;
+    }
+
+    .balance-amount {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    /* ---------- Pul yechish shakli ---------- */
+    .withdraw-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 25px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .withdraw-header h5 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .withdraw-body {
+        padding: 25px;
+    }
+
+    .form-group-modern {
+        margin-bottom: 18px;
+    }
+
+    .form-group-modern label {
+        display: block;
+        margin-bottom: 6px;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .form-group-modern .form-control {
+        width: 100%;
+        height: 46px;
+        padding: 0 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        color: #1e293b;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.25s ease;
+    }
+
+    .form-group-modern .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Forma xatolari - Django form.errors shu yerda chiqadi */
+    .form-error {
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .submit-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        height: 48px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .submit-button:hover:not(:disabled) {
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .receipt-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 8px;
+        background: #667EEA;
+        color: #FFFFFF;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .receipt-button:hover {
+        background: #5A67D8;
+        color: #FFFFFF;
+        transform: translateY(-1px);
+    }
+
+    .receipt-empty {
+        color: #A0AEC0;
+    }
+
+    .pending-notice {
+        padding: 16px 18px;
+        border: 1px solid #FBD38D;
+        border-left: 4px solid #DD6B20;
+        border-radius: 10px;
+        background: #FFFAF0;
+        color: #7B341E;
+    }
+
+    .pending-notice strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+
+    .pending-notice p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .submit-button:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    /* ---------- O'tkazmalar tarixi ---------- */
+    .transactions-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 20px 25px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .transactions-header h5 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .transactions-count {
+        padding: 6px 14px;
+        border-radius: 30px;
+        background: rgba(102, 126, 234, 0.1);
+        color: #4c51bf;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .transactions-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .transactions-table th {
+        padding: 14px 25px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .transactions-table td {
+        padding: 16px 25px;
+        border-top: 1px solid #eef2f7;
+        color: #1e293b;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .card-number {
+        color: #475569;
+        font-family: monospace;
+        font-size: 14px;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+
+    .amount-cell {
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* Holat belgisi - klass nomi model'dagi status qiymatidan yasaladi */
+    .status-badge {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-new {
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+    }
+
+    .status-paid {
+        background: rgba(16, 185, 129, 0.12);
+        color: #047857;
+    }
+
+    .status-cancelled {
+        background: rgba(239, 68, 68, 0.12);
+        color: #b91c1c;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        color: #94a3b8;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .empty-state img {
+        display: block;
+        margin: 0 auto 12px;
+        opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+        .balance-card {
+            padding: 25px;
+        }
+
+        .balance-amount {
+            font-size: 26px;
+        }
+
+        .withdraw-body,
+        .withdraw-header,
+        .transactions-header {
+            padding: 18px;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 12px 18px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="payment-card balance-card">
+                <img width="34" height="34" src="https://img.icons8.com/ios/50/FFFFFF/wallet--v1.png" alt="wallet"/>
+                <h5>Mening hisobim</h5>
+                <div class="balance-amount">{{ request.user.balance|intcomma }} so'm</div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="payment-card">
+                <div class="withdraw-header">
+                    <img width="22" height="22" src="https://img.icons8.com/ios/50/667EEA/money-bag.png" alt="money"/>
+                    <h5>Pul yechish</h5>
+                </div>
+
+                <div class="withdraw-body">
+                    {% if pending_payment %}
+                        <div class="pending-notice">
+                            <strong>So'rovingiz ko'rib chiqilmoqda</strong>
+                            <p>
+                                {{ pending_payment.created_at|date:"d.m.Y H:i" }} da yuborilgan
+                                {{ pending_payment.amount|intcomma }} so'mlik so'rovingiz hali yakunlanmagan.
+                                Yangi so'rov yuborish uchun u to'langunicha yoki bekor qilinguncha kuting.
+                            </p>
+                        </div>
+                    {% else %}
+                    <form class="payment-form" method="post">
+                        {% csrf_token %}
+
+                        {% for error in form.non_field_errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+
+                        <div class="form-group-modern">
+                            <label for="id_card_number">Karta raqami</label>
+                            <input type="text" name="card_number" id="id_card_number" class="form-control"
+                                   value="{{ form.card_number.value|default_if_none:'' }}"
+                                   placeholder="Karta raqamini kiriting"
+                                   minlength="16" maxlength="16" required>
+                            {% for error in form.card_number.errors %}
+                                <div class="form-error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label for="id_amount">Summa</label>
+                            <input type="number" name="amount" id="id_amount" class="form-control"
+                                   placeholder="Miqdorini kiriting" min="1" required>
+                            {% for error in form.amount.errors %}
+                                <div class="form-error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="submit-button">Tasdiqlash</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-card">
+        <div class="transactions-header">
+            <h5>
+                <img width="20" height="20" src="https://img.icons8.com/ios/50/667EEA/time-machine--v1.png" alt="history"/>
+                O'tkazmalar tarixi
+            </h5>
+            <span class="transactions-count">{{ payments|length }} ta</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="transactions-table">
+                <thead>
+                <tr>
+                    <th>Sana</th>
+                    <th>Hisob raqam</th>
+                    <th>Summa</th>
+                    <th>Holat</th>
+                    <th>Chek</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.created_at|date:"d.m.Y H:i" }}</td>
+                        <td class="card-number">**** {{ payment.card_number|slice:"-4:" }}</td>
+                        <td class="amount-cell">{{ payment.amount|intcomma }} so'm</td>
+                        <td>
+                            <span class="status-badge status-{{ payment.status }}">
+                                {{ payment.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if payment.receipt %}
+                                <a class="receipt-button"
+                                   href="{% url 'orders:payment-receipt' payment.pk %}"
+                                   title="Chekni yuklab olish">
+                                    <img width="16" height="16"
+                                         src="https://img.icons8.com/ios-glyphs/30/FFFFFF/download--v1.png"
+                                         alt="download"/>
+                                    <span>Yuklash</span>
+                                </a>
+                            {% else %}
+                                <span class="receipt-empty">&mdash;</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <img width="40" height="40" src="https://img.icons8.com/ios/50/94A3B8/time-machine--v1.png" alt="history"/>
+                                <div>Hozircha pul yechish so'rovlari mavjud emas.</div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Ikki marta yuborilishining oldini oladi
+    const paymentForm = document.querySelector('.payment-form');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', function () {
+            const button = this.querySelector('.submit-button');
+            button.disabled = true;
+            button.textContent = 'Bajarilmoqda...';
+        });
+    }
+</script>
+{% endblock %}

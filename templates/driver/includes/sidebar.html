@@ -1,0 +1,45 @@
+<aside class="op-sidebar">
+    <div class="op-brand">
+        <span class="op-brand-mark"><svg><use href="#i-box"/></svg></span>
+        <div class="op-brand-text">
+            <b>Nova</b>
+            <span>Haydovchi paneli</span>
+        </div>
+    </div>
+
+    <div class="op-me">
+        <div class="op-me-avatar" title="{{ request.user.get_full_name|default:request.user.phone }}">{% if request.user.first_name or request.user.last_name %}{{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}{% else %}{{ request.user.phone|slice:"-2:" }}{% endif %}</div>
+        <div class="op-me-info">
+            <b>{{ request.user.get_full_name|default:request.user.phone }}</b>
+            <span><i class="op-dot"></i><em data-op-status-text style="font-style:normal">Onlayn</em></span>
+        </div>
+    </div>
+
+    <nav class="op-nav">
+        <div class="op-nav-title">Ish maydoni</div>
+
+        {# Umumiy navbat: yetkazilmoqda holatidagi, hali olinmagan buyurtmalar #}
+        <a href="{% url 'driver:available-orders' %}" class="{% if active == 'available' %}is-active{% endif %}">
+            <svg><use href="#i-hand"/></svg>
+            Yangi yetkazmalar
+            <span class="op-nav-count is-hot">{{ available_count }}</span>
+        </a>
+
+        <a href="{% url 'driver:my-orders' %}" class="{% if active == 'my_orders' %}is-active{% endif %}">
+            <svg><use href="#i-inbox"/></svg>
+            Mening yetkazmalarim
+            <span class="op-nav-count">{{ my_count }}</span>
+        </a>
+    </nav>
+
+    <div class="op-sidebar-foot">
+        <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="op-logout">
+                <svg><use href="#i-logout"/></svg>
+                Chiqish
+            </button>
+        </form>
+    </div>
+</aside>
+<div class="op-sidebar-backdrop"></div>

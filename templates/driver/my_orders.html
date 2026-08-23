@@ -1,0 +1,291 @@
+{% extends 'base/operator_base.html' %}
+{% load humanize %}
+
+{% block title %}Mening yetkazmalarim{% endblock %}
+
+{% block page_title %}Mening yetkazmalarim{% endblock %}
+{% block page_subtitle %}Ma'lumotlarni o'zgartirib bo'lmaydi - faqat yetkazildi deb belgilanadi{% endblock %}
+
+{% block sidebar %}{% include 'driver/includes/sidebar.html' with active='my_orders' %}{% endblock %}
+
+{% block operator_css %}
+    <style>
+        .dv-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .dv-tab {
+            padding: 9px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, .22);
+            background: #fff;
+            color: #4A5568;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .dv-tab.is-active {
+            background: #667EEA;
+            border-color: #667EEA;
+            color: #fff;
+        }
+
+        .dv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+
+        .dv-order {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(102, 126, 234, .18);
+            border-radius: 14px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .dv-order-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(102, 126, 234, .12);
+            background: rgba(102, 126, 234, .05);
+        }
+
+        .dv-order-id {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2D3748;
+        }
+
+        .dv-badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .dv-badge.is-shipping {
+            background: rgba(221, 107, 32, .12);
+            color: #C05621;
+        }
+
+        .dv-badge.is-delivered {
+            background: rgba(56, 161, 105, .12);
+            color: #2F855A;
+        }
+
+        .dv-rows {
+            padding: 6px 16px 14px;
+            flex: 1;
+        }
+
+        .dv-row {
+            display: flex;
+            gap: 12px;
+            padding: 9px 0;
+            border-bottom: 1px dashed rgba(102, 126, 234, .14);
+            font-size: 14px;
+        }
+
+        .dv-row:last-child {
+            border-bottom: 0;
+        }
+
+        .dv-label {
+            flex: none;
+            width: 108px;
+            color: #718096;
+        }
+
+        .dv-value {
+            color: #2D3748;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .dv-value a {
+            color: #4C51BF;
+            text-decoration: none;
+        }
+
+        .dv-value.is-muted {
+            color: #A0AEC0;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .dv-total {
+            font-size: 16px;
+            color: #2F855A;
+        }
+
+        .dv-foot {
+            padding: 14px 16px;
+            border-top: 1px solid rgba(102, 126, 234, .12);
+        }
+
+        .dv-foot .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .dv-done {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #2F855A;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .dv-done svg {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+{% endblock %}
+
+{% block operator_content %}
+    <div class="dv-tabs">
+        <a class="dv-tab {% if selected_status == 'active' %}is-active{% endif %}"
+           href="{% url 'driver:my-orders' %}">
+            Yetkazilmoqda ({{ my_count }})
+        </a>
+        <a class="dv-tab {% if selected_status == 'delivered' %}is-active{% endif %}"
+           href="?status=delivered">
+            Yetkazilgan ({{ delivered_count }})
+        </a>
+        <a class="dv-tab {% if selected_status == 'all' %}is-active{% endif %}"
+           href="?status=all">
+            Barchasi
+        </a>
+    </div>
+
+    <div class="dv-grid">
+        {% for order in orders %}
+            <article class="dv-order">
+                <div class="dv-order-head">
+                    <span class="dv-order-id">Buyurtma #{{ order.id }}</span>
+                    {% if order.status == 'delivered' %}
+                        <span class="dv-badge is-delivered">{{ order.get_status_display }}</span>
+                    {% else %}
+                        <span class="dv-badge is-shipping">{{ order.get_status_display }}</span>
+                    {% endif %}
+                </div>
+
+                {# Faqat o'qish uchun - hech qanday input yo'q #}
+                <div class="dv-rows">
+                    <div class="dv-row">
+                        <span class="dv-label">Mijoz</span>
+                        <span class="dv-value">{{ order.customer_name }}</span>
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Telefon</span>
+                        <span class="dv-value"><a href="tel:{{ order.phone }}">{{ order.phone }}</a></span>
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Manzil</span>
+                        {% if order.address %}
+                            <span class="dv-value">{{ order.address }}</span>
+                        {% else %}
+                            <span class="dv-value is-muted">Manzil kiritilmagan</span>
+                        {% endif %}
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Hudud</span>
+                        {% if order.district %}
+                            <span class="dv-value">{{ order.district.region.title }}, {{ order.district.title }}</span>
+                        {% else %}
+                            <span class="dv-value is-muted">Ko'rsatilmagan</span>
+                        {% endif %}
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Mahsulot</span>
+                        <span class="dv-value">{{ order.product.name }}</span>
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Soni</span>
+                        <span class="dv-value">{{ order.quantity }} dona</span>
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">To'lov</span>
+                        <span class="dv-value dv-total">{{ order.total_price|intcomma }} so'm</span>
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Operator</span>
+                        {% if order.operator %}
+                            <span class="dv-value">{{ order.operator.get_full_name|default:order.operator.phone }}</span>
+                        {% else %}
+                            <span class="dv-value is-muted">Biriktirilmagan</span>
+                        {% endif %}
+                    </div>
+                    <div class="dv-row">
+                        <span class="dv-label">Olingan</span>
+                        <span class="dv-value">{{ order.taken_at|date:"d.m.Y H:i"|default:"-" }}</span>
+                    </div>
+                    {% if order.delivered_at %}
+                        <div class="dv-row">
+                            <span class="dv-label">Yetkazilgan</span>
+                            <span class="dv-value">{{ order.delivered_at|date:"d.m.Y H:i" }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="dv-foot">
+                    {% if order.status == 'shipping' %}
+                        <form method="post" action="{% url 'driver:deliver-order' order.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">
+                                <svg><use href="#i-check"/></svg>
+                                Yetkazildi deb belgilash
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="dv-done">
+                            <svg><use href="#i-check"/></svg>
+                            {{ order.delivered_at|date:"d.m.Y H:i" }} da yakunlangan
+                        </div>
+                    {% endif %}
+                </div>
+            </article>
+        {% empty %}
+            <div class="op-card op-empty" style="grid-column: 1 / -1;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.7" y2="16.7"/>
+                </svg>
+                <strong>Bu yerda buyurtma yo'q</strong>
+                "Yangi yetkazmalar" sahifasidan buyurtma oling
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+        <div class="op-pagination">
+            <span class="op-pagination-info">
+                {{ page_obj.start_index }}-{{ page_obj.end_index }} / jami {{ page_obj.paginator.count }} ta
+            </span>
+            <div class="op-pagination-controls">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-ghost btn-sm"
+                       href="?page={{ page_obj.previous_page_number }}&status={{ selected_status }}">Oldingi</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a class="btn btn-ghost btn-sm"
+                       href="?page={{ page_obj.next_page_number }}&status={{ selected_status }}">Keyingi</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

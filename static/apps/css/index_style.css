@@ -1,0 +1,222 @@
+/* Grid gutters
+   This project runs Bootstrap 4.3.1, which has no .g-* classes — they arrived
+   in Bootstrap 5. The markup already uses them, so until now they applied
+   nothing and wrapped rows sat flush against each other with no vertical gap.
+   Backported here on the Bootstrap 5 scale so the existing markup works, and
+   so an eventual Bootstrap 5 upgrade is a no-op for these rows. */
+.row.g-0, .row.g-1, .row.g-2, .row.g-3, .row.g-4, .row.g-5 {
+    margin-right: calc(var(--gutter-x) / -2);
+    margin-left: calc(var(--gutter-x) / -2);
+    margin-top: calc(var(--gutter-y) * -1);
+}
+
+.row.g-0 > *, .row.g-1 > *, .row.g-2 > *,
+.row.g-3 > *, .row.g-4 > *, .row.g-5 > * {
+    padding-right: calc(var(--gutter-x) / 2);
+    padding-left: calc(var(--gutter-x) / 2);
+    margin-top: var(--gutter-y);
+}
+
+.row.g-0 { --gutter-x: 0;       --gutter-y: 0; }
+.row.g-1 { --gutter-x: 0.25rem; --gutter-y: 0.25rem; }
+.row.g-2 { --gutter-x: 0.5rem;  --gutter-y: 0.5rem; }
+.row.g-3 { --gutter-x: 1rem;    --gutter-y: 1rem; }
+.row.g-4 { --gutter-x: 1.5rem;  --gutter-y: 1.5rem; }
+.row.g-5 { --gutter-x: 3rem;    --gutter-y: 3rem; }
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.section-subtitle {
+    color: #666;
+    margin: 0.25rem 0 0;
+}
+
+.view-all-link {
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+    color: #0056b3;
+    gap: 0.5rem;
+}
+
+/* Category Cards */
+.category-card {
+    display: block;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    height: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.category-image-wrapper {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Product Cards */
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-link {
+    display: block;
+    text-decoration: none;
+}
+
+.product-image-wrapper {
+    position: relative;
+    padding-top: 100%;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-info {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.product-title a {
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.product-title a:hover {
+    color: #007bff;
+}
+
+.product-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #007bff;
+    margin: 0;
+}
+
+/* Owl Carousel Custom Styling */
+.owl-carousel .owl-nav button {
+    background: white !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.owl-carousel .owl-nav button.owl-prev {
+    left: -20px;
+}
+
+.owl-carousel .owl-nav button.owl-next {
+    right: -20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .category-image-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+
+    .product-info {
+        padding: 0.75rem;
+    }
+
+    .owl-carousel .owl-nav button {
+        width: 32px;
+        height: 32px;
+    }
+}

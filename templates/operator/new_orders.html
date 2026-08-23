@@ -1,0 +1,189 @@
+{% extends 'base/operator_base.html' %}
+{% load humanize %}
+
+{% block title %}Yangi buyurtmalar{% endblock %}
+
+{% block page_title %}Yangi buyurtmalar{% endblock %}
+{% block page_subtitle %}Buyurtmani o'zingizga oling - u "Buyurtmalarim"ga o'tadi{% endblock %}
+
+{% block sidebar %}{% include 'operator/includes/sidebar.html' with active='new_orders' %}{% endblock %}
+
+{% block operator_content %}
+    <!-- ---------- Tepadagi chaqiruv paneli ---------- -->
+    <section class="op-pool-hero">
+        <span class="op-pool-hero-icon"><svg><use href="#i-hand"/></svg></span>
+
+        <div class="op-pool-hero-text">
+            <h2>Navbatda <span data-op-count>{{ new_orders_count }}</span> ta yangi buyurtma bor</h2>
+            <p>Olingan buyurtma ro'yxatdan chiqadi va "Buyurtmalarim" sahifasida ochiladi.</p>
+        </div>
+
+        <div class="op-pool-hero-actions">
+            <form method="post" action="{% url 'operator:take-next-order' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-white" data-op-take-next>
+                    <svg><use href="#i-check"/></svg>
+                    Keyingi buyurtmani olish
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ---------- Navbat jadvali ------------>
+    {# data-op-per-page serverdagi paginate_by bilan bir xil: JS bir sahifani #}
+    {# ikkinchi marta bo'lib tashlamasligi uchun. Sahifalash serverda. #}
+    <section class="op-card" data-op-pool data-op-table data-op-per-page="15"
+             data-op-search-mode="server">
+
+        <div class="op-toolbar">
+            <form method="get" class="op-search">
+                <svg><use href="#i-search"/></svg>
+                <input type="search" name="q" placeholder="Mijoz ismi, telefon yoki buyurtma raqami..."
+                       data-op-search aria-label="Qidirish" value="{{ request.GET.q }}">
+                <kbd>/</kbd>
+            </form>
+
+{#            <select class="op-select" data-op-filter="region" aria-label="Viloyat">#}
+{#                <option value="all">Barcha viloyatlar</option>#}
+{#                {% for region in regions %}#}
+{#                	<option value="{{ region.id }}">{{ region.title }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+
+{#            <select class="op-select" data-op-filter="source" aria-label="Manba">#}
+{#                <option value="all">Barcha manbalar</option>#}
+{#                <option>Instagram</option>#}
+{#                <option>Telegram</option>#}
+{#                <option>Sayt</option>#}
+{#            </select>#}
+
+            <!-- Ro'yxatni yangilash: backend ulangach oddiy havola bo'ladi -->
+            <button type="button" class="btn btn-ghost btn-sm" onclick="location.reload()">
+                <svg><use href="#i-refresh"/></svg>
+                Yangilash
+            </button>
+        </div>
+
+        <div class="op-table-wrap">
+            <table class="op-table">
+                <thead>
+                <tr>
+                    <th data-sort="num">ID</th>
+                    <th data-sort="date">Sana</th>
+                    <th data-sort="text">Mijoz</th>
+                    <th data-sort="text">Mahsulot</th>
+{#                    <th data-sort="text">Viloyat</th>#}
+                    <th data-sort="num">Soni</th>
+                    <th data-sort="num">Summa</th>
+                    <th>Amallar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                	<tr data-status="new"
+                    data-order="#{{ order.id }}" data-customer="{{ order.customer_name }}"
+                    data-search="{{ order.phone}}">
+                    <td class="cell-id" data-value="{{ order.id }}">#{{ order.id }}</td>
+                    <td class="cell-muted num" data-value="{{ order.created_at|date:'YmdHis' }}"
+                        title="{{ order.created_at|date:'d.m.Y H:i:s' }}">
+                        {{ order.created_at|date:"d.m.Y H:i" }}
+                        <span class="cell-sub">{{ order.created_at|naturaltime }}</span>
+                    </td>
+                    <td>
+                        <span class="cell-strong">{{ order.customer_name }}</span>
+                        <span class="cell-sub num">{{ order.phone}}</span>
+                    </td>
+                    <td>
+                        <span class="cell-clip" title="{{ order.product.name }}">{{ order.product.name }}</span>
+                        <span class="cell-sub">{{ order.product.category.name }}</span>
+                    </td>
+{#                    <td>{{ order.district.region.title }}</td>#}
+                    <td class="num">{{ order.quantity }}</td>
+                    <td class="num cell-strong" data-value="{{ order.total_price }}">{{ order.total_price|intcomma }}</td>
+                    <td>
+                        <div class="cell-actions">
+                            <form method="post" action="{% url 'operator:take-order' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ order.id }}">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <svg><use href="#i-hand"/></svg>
+                                    O'zimga olish
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <!-- Ro'yxat bo'shaganda yoki filtrga hech narsa mos kelmaganda ko'rinadi -->
+                <tr class="op-no-result">
+                    <td colspan="7" class="op-empty">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.7" y2="16.7"/>
+                        </svg>
+                        <strong>Navbatda buyurtma yo'q</strong>
+                        Filtrni o'zgartiring yoki "Yangilash" tugmasini bosing
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        {# Server sahifalashi. data-op-* ilgaklari yo'q - JS bu blokka tegmaydi. #}
+        {% if is_paginated %}
+            <div class="op-pagination">
+                <span class="op-pagination-info">
+                    {{ page_obj.start_index }}-{{ page_obj.end_index }} /
+                    jami {{ page_obj.paginator.count }} ta
+                </span>
+                <div class="op-pages">
+                    {% if page_obj.has_previous %}
+                        <a class="op-page" href="{% querystring page=page_obj.previous_page_number %}"
+                           aria-label="Oldingi">&lsaquo;</a>
+                    {% else %}
+                        <button type="button" class="op-page" disabled aria-label="Oldingi">&lsaquo;</button>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <span class="op-page is-active" aria-current="page">{{ num }}</span>
+                        {% elif num == 1 or num == page_obj.paginator.num_pages or num > page_obj.number|add:"-2" and num < page_obj.number|add:"2" %}
+                            <a class="op-page" href="{% querystring page=num %}">{{ num }}</a>
+                        {% elif num == page_obj.number|add:"-2" or num == page_obj.number|add:"2" %}
+                            <button type="button" class="op-page" disabled>&hellip;</button>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class="op-page" href="{% querystring page=page_obj.next_page_number %}"
+                           aria-label="Keyingi">&rsaquo;</a>
+                    {% else %}
+                        <button type="button" class="op-page" disabled aria-label="Keyingi">&rsaquo;</button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- ---------- Qisqacha eslatma ---------- -->
+    <div class="op-note">
+        <svg><use href="#i-info"/></svg>
+        <div>
+            <b>Qanday ishlaydi</b>
+            <ul>
+                <li>Buyurtmani olganingizdan keyin u shu ro'yxatdan chiqadi va boshqa operatorlarga
+                    ko'rinmaydi.
+                </li>
+                <li>Olingan buyurtma <a href="{% url 'operator:my-orders' %}"><b>Buyurtmalarim</b></a> sahifasida "Yangi" holatida
+                    turadi.
+                </li>
+                <li>Ro'yxat o'zi yangilanmaydi - yangi buyurtmalarni ko'rish uchun "Yangilash" tugmasini
+                    bosing.
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Kirish - Nova</title>
+  <link rel="stylesheet" href="{% static 'apps/css/auth.css' %}">
+</head>
+<body>
+
+  {% if messages %}
+    <div class="site-messages">
+      {% for message in messages %}
+        <div class="site-message site-message-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="auth-section">
+    <div class="auth-card">
+
+      <div class="auth-logo">
+        <a href="{% url 'catalog:home' %}">
+          <img src="{% static 'apps/img/nova-lockup.svg' %}" alt="Nova">
+        </a>
+      </div>
+
+      <h1 class="auth-title">Xush kelibsiz</h1>
+      <p class="auth-subtitle">Hisobingizga kiring</p>
+
+      {% if form.non_field_errors %}
+        <div class="auth-alert auth-alert-error">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" class="auth-form" novalidate>
+        {% csrf_token %}
+
+        {# LoginRequiredMixin yuborgan ?next= manzilini POST bilan birga qaytaramiz #}
+        {% if request.GET.next %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+
+        <div class="auth-field">
+          <label for="{{ form.phone.id_for_label }}">Telefon raqam</label>
+          <input
+            type="tel"
+            name="{{ form.phone.html_name }}"
+            id="{{ form.phone.id_for_label }}"
+            placeholder="+998 90 123 45 67"
+            value="{{ form.phone.value|default:'' }}"
+            autocomplete="tel"
+            required
+          >
+          {% if form.phone.errors %}
+            <span class="auth-field-error">{{ form.phone.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.password.id_for_label }}">Parol</label>
+          <input
+            type="password"
+            name="{{ form.password.html_name }}"
+            id="{{ form.password.id_for_label }}"
+            placeholder="Parolingizni kiriting"
+            autocomplete="current-password"
+            required
+          >
+          {% if form.password.errors %}
+            <span class="auth-field-error">{{ form.password.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="auth-row">
+          <label class="auth-checkbox">
+            <input type="checkbox" name="remember">
+            <span>Eslab qolish</span>
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit">Kirish</button>
+      </form>
+
+      <p class="auth-switch">
+        Hisobingiz yo'qmi? <a href="{% url 'accounts:register' %}">Ro'yxatdan o'tish</a>
+      </p>
+
+    </div>
+  </section>
+
+</body>
+</html>
