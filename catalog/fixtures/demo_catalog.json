@@ -1,0 +1,1218 @@
+[
+{
+  "model": "catalog.category",
+  "pk": 25,
+  "fields": {
+    "slug": "kitoblar",
+    "name": "Kitoblar",
+    "order": 0,
+    "image": "demo/categories/kitoblar.jpg"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 26,
+  "fields": {
+    "slug": "elektronika",
+    "name": "Elektronika",
+    "order": 1,
+    "image": "demo/categories/elektronika.jpg"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 27,
+  "fields": {
+    "slug": "sport-va-faollik",
+    "name": "Sport va faollik",
+    "order": 2,
+    "image": "demo/categories/sport-va-faollik.jpg"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 28,
+  "fields": {
+    "slug": "uy-rozgor",
+    "name": "Uy-ro'zg'or",
+    "order": 3,
+    "image": "demo/categories/uy-rozgor.jpg"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 29,
+  "fields": {
+    "slug": "gozallik",
+    "name": "Go'zallik",
+    "order": 4,
+    "image": "demo/categories/gozallik.jpg"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 30,
+  "fields": {
+    "slug": "bolalar-uchun",
+    "name": "Bolalar uchun",
+    "order": 5,
+    "image": "demo/categories/bolalar-uchun.jpg"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 31,
+  "fields": {
+    "slug": "sovgalar",
+    "name": "Sovg'alar",
+    "order": 6,
+    "image": "demo/categories/sovgalar.jpg"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 128,
+  "fields": {
+    "slug": "odatlar-kuchi",
+    "name": "Odatlar kuchi",
+    "category": 25,
+    "price": "89000",
+    "description": "Kichik odatlarni tizimga solib, katta natijaga erishish haqidagi xalqaro bestseller. Qattiq muqova, 320 bet.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.490Z",
+    "stock": 40,
+    "return_price": "12000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 129,
+  "fields": {
+    "slug": "otkan-kunlar",
+    "name": "O'tkan kunlar",
+    "category": 25,
+    "price": "65000",
+    "description": "Abdulla Qodiriyning mumtoz romani — o'zbek adabiyotining ilk romani. Yumshoq muqova, 380 bet.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.491Z",
+    "stock": 25,
+    "return_price": "8000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 130,
+  "fields": {
+    "slug": "biznes-kitoblari-toplami",
+    "name": "Biznes kitoblari to'plami",
+    "category": 25,
+    "price": "245000",
+    "description": "Boshlovchi tadbirkorlar uchun 4 ta kitobdan iborat to'plam: strategiya, moliya, marketing va boshqaruv.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.492Z",
+    "stock": 15,
+    "return_price": "30000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 131,
+  "fields": {
+    "slug": "bolalar-ertaklari",
+    "name": "Bolalar ertaklari",
+    "category": 25,
+    "price": "55000",
+    "description": "Rangli illyustratsiyali ertaklar to'plami. Qalin qog'oz, 2 yoshdan yuqori bolalar uchun.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.493Z",
+    "stock": 60,
+    "return_price": "7000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 132,
+  "fields": {
+    "slug": "charm-muqovali-kundalik",
+    "name": "Charm muqovali kundalik",
+    "category": 25,
+    "price": "79000",
+    "description": "Sun'iy charm muqovali kundalik, 200 bet, qatorli. Rezinali qulf va lentali xatcho'p bilan.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.494Z",
+    "stock": 35,
+    "return_price": "10000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 133,
+  "fields": {
+    "slug": "simsiz-quloqchin-tws-9",
+    "name": "Simsiz quloqchin TWS-9",
+    "category": 26,
+    "price": "249000",
+    "description": "Bluetooth 5.3, zaryad keysi bilan 24 soatgacha ishlash, shovqinni bostirish funksiyasi.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.494Z",
+    "stock": 60,
+    "return_price": "30000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 134,
+  "fields": {
+    "slug": "power-bank-20000mah",
+    "name": "Power Bank 20000mAh",
+    "category": 26,
+    "price": "179000",
+    "description": "20000mAh sig'im, 22.5W tez quvvatlash, ikkita USB va bitta USB-C chiqishi.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.495Z",
+    "stock": 45,
+    "return_price": "22000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 135,
+  "fields": {
+    "slug": "smart-watch-s8",
+    "name": "Smart Watch S8",
+    "category": 26,
+    "price": "399000",
+    "description": "1.85\" AMOLED ekran, puls va kislorod o'lchash, 100+ sport rejimi, IP68 himoya.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.496Z",
+    "stock": 20,
+    "return_price": "45000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 136,
+  "fields": {
+    "slug": "bluetooth-kolonka-boom",
+    "name": "Bluetooth kolonka Boom",
+    "category": 26,
+    "price": "219000",
+    "description": "10W stereo ovoz, IPX7 suvdan himoya, 12 soat uzluksiz musiqa.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.497Z",
+    "stock": 30,
+    "return_price": "26000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 137,
+  "fields": {
+    "slug": "simsiz-sichqoncha-silent",
+    "name": "Simsiz sichqoncha Silent",
+    "category": 26,
+    "price": "89000",
+    "description": "2.4GHz simsiz ulanish, ovozsiz tugmalar, 1600 DPI, AA batareya bilan 12 oy ishlaydi.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.497Z",
+    "stock": 55,
+    "return_price": "11000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 138,
+  "fields": {
+    "slug": "yoga-gilamchasi",
+    "name": "Yoga gilamchasi",
+    "category": 27,
+    "price": "129000",
+    "description": "6 mm qalinlikdagi ikki tomonlama NBR gilamcha, sirpanmaydigan sirt, olib yurish tasmasi bilan.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.498Z",
+    "stock": 50,
+    "return_price": "15000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 139,
+  "fields": {
+    "slug": "gantel-toplami-2x5kg",
+    "name": "Gantel to'plami 2x5kg",
+    "category": 27,
+    "price": "219000",
+    "description": "Neopren qoplamali juft gantel, qo'l terlaganda ham sirpanmaydi. Uy sharoiti uchun ideal.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.499Z",
+    "stock": 20,
+    "return_price": "25000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 140,
+  "fields": {
+    "slug": "sport-sumkasi-active",
+    "name": "Sport sumkasi Active",
+    "category": 27,
+    "price": "159000",
+    "description": "Suv o'tkazmaydigan mato, alohida poyabzal bo'limi, 35 litr sig'im.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.500Z",
+    "stock": 35,
+    "return_price": "18000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 141,
+  "fields": {
+    "slug": "sport-suv-shishasi-1l",
+    "name": "Sport suv shishasi 1L",
+    "category": 27,
+    "price": "69000",
+    "description": "BPA-siz tritan plastik, o'lchov shkalasi va bir qo'l bilan ochiladigan qopqoq.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.501Z",
+    "stock": 70,
+    "return_price": "9000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 142,
+  "fields": {
+    "slug": "sakrash-arqoni-pro",
+    "name": "Sakrash arqoni Pro",
+    "category": 27,
+    "price": "49000",
+    "description": "Podshipnikli tez arqon, uzunligi rostlanadi, hisoblagichi bor.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.501Z",
+    "stock": 80,
+    "return_price": "6000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 143,
+  "fields": {
+    "slug": "termos-12l",
+    "name": "Termos 1.2L",
+    "category": 28,
+    "price": "99000",
+    "description": "Ikki qavatli po'lat termos, issiqni 12 soat, sovuqni 18 soat saqlaydi.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.502Z",
+    "stock": 45,
+    "return_price": "11000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 144,
+  "fields": {
+    "slug": "aromadiffuzor-mist",
+    "name": "Aromadiffuzor Mist",
+    "category": 28,
+    "price": "159000",
+    "description": "300 ml sig'imli ultratovushli diffuzor, 7 rangli fon yorug'ligi va taymer bilan.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.503Z",
+    "stock": 30,
+    "return_price": "18000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 145,
+  "fields": {
+    "slug": "choy-servizi-12-predmet",
+    "name": "Choy servizi 12 predmet",
+    "category": 28,
+    "price": "289000",
+    "description": "Chinni choy servizi: 6 ta piyola, 6 ta likopcha va choynak. Sovg'abop quti bilan.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.504Z",
+    "stock": 18,
+    "return_price": "34000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 146,
+  "fields": {
+    "slug": "oshxona-pichoqlari-toplami",
+    "name": "Oshxona pichoqlari to'plami",
+    "category": 28,
+    "price": "249000",
+    "description": "Zanglamaydigan po'latdan 5 ta pichoq va yog'och tagligi. Ergonomik dastalar.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.504Z",
+    "stock": 22,
+    "return_price": "28000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 147,
+  "fields": {
+    "slug": "stol-chirogi-led",
+    "name": "Stol chirog'i LED",
+    "category": 28,
+    "price": "139000",
+    "description": "3 xil yorug'lik harorati, 10 daraja yorqinlik, USB quvvatlash va telefon tagligi.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.505Z",
+    "stock": 40,
+    "return_price": "16000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 148,
+  "fields": {
+    "slug": "yuz-uchun-namlantiruvchi-krem",
+    "name": "Yuz uchun namlantiruvchi krem",
+    "category": 29,
+    "price": "119000",
+    "description": "Gialuron kislotali kunduzgi krem, barcha teri turlari uchun. 50 ml.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.506Z",
+    "stock": 50,
+    "return_price": "14000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 149,
+  "fields": {
+    "slug": "parfyum-nova-nuit-50ml",
+    "name": "Parfyum Nova Nuit 50ml",
+    "category": 29,
+    "price": "349000",
+    "description": "Sharqona-gulli parfyum suvi: bergamot, yasmin va sandal daraxti notalari.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.507Z",
+    "stock": 25,
+    "return_price": "40000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 150,
+  "fields": {
+    "slug": "soch-quritgich-ion-2200w",
+    "name": "Soch quritgich Ion 2200W",
+    "category": 29,
+    "price": "289000",
+    "description": "Ionli quritgich, 2 tezlik va 3 harorat rejimi, sovuq havo tugmasi.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.507Z",
+    "stock": 20,
+    "return_price": "33000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 151,
+  "fields": {
+    "slug": "boyanish-toplami-basic",
+    "name": "Bo'yanish to'plami Basic",
+    "category": 29,
+    "price": "199000",
+    "description": "Kundalik bo'yanish uchun palitra, 12 ta soya, ikkita lab bo'yog'i va cho'tkalar.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.508Z",
+    "stock": 30,
+    "return_price": "23000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 152,
+  "fields": {
+    "slug": "tabiiy-sovun-toplami",
+    "name": "Tabiiy sovun to'plami",
+    "category": 29,
+    "price": "89000",
+    "description": "Qo'lda tayyorlangan 4 ta sovun: zaytun, lavanda, asal va ko'mir.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.509Z",
+    "stock": 60,
+    "return_price": "10000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 153,
+  "fields": {
+    "slug": "konstruktor-350-detal",
+    "name": "Konstruktor 350 detal",
+    "category": 30,
+    "price": "189000",
+    "description": "350 ta rangli detal, 3 yoshdan yuqori bolalar uchun. Saqlash qutisi bilan.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.510Z",
+    "stock": 35,
+    "return_price": "22000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 154,
+  "fields": {
+    "slug": "yumshoq-oyinchoq-ayiq",
+    "name": "Yumshoq o'yinchoq ayiq",
+    "category": 30,
+    "price": "99000",
+    "description": "45 sm bo'yli gipoallergen ayiqcha, mashinada yuvish mumkin.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.510Z",
+    "stock": 45,
+    "return_price": "12000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 155,
+  "fields": {
+    "slug": "rangli-qalamlar-36-ta",
+    "name": "Rangli qalamlar 36 ta",
+    "category": 30,
+    "price": "59000",
+    "description": "Yog'och korpusli 36 rangli qalam, sinmaydigan grifel, metall quti bilan.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.511Z",
+    "stock": 70,
+    "return_price": "7000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 156,
+  "fields": {
+    "slug": "puzzle-500-detal",
+    "name": "Puzzle 500 detal",
+    "category": 30,
+    "price": "79000",
+    "description": "500 detalli manzarali puzzle, tayyor o'lchami 50x38 sm.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.512Z",
+    "stock": 40,
+    "return_price": "9000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 157,
+  "fields": {
+    "slug": "maktab-ryukzagi",
+    "name": "Maktab ryukzagi",
+    "category": 30,
+    "price": "179000",
+    "description": "Ortopedik orqa qismli ryukzak, 3 bo'lim, svetoforda ko'rinadigan aks etuvchi tasmalar.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.513Z",
+    "stock": 38,
+    "return_price": "21000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 158,
+  "fields": {
+    "slug": "sovga-toplami-premium",
+    "name": "Sovg'a to'plami Premium",
+    "category": 31,
+    "price": "269000",
+    "description": "Bayram uchun tayyor to'plam: shokolad, sham, choy va tabrik kartochkasi.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.514Z",
+    "stock": 25,
+    "return_price": "31000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 159,
+  "fields": {
+    "slug": "shokolad-toplami",
+    "name": "Shokolad to'plami",
+    "category": 31,
+    "price": "129000",
+    "description": "Belgiya shokoladidan 24 dona assorti, sovg'abop qutida.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.515Z",
+    "stock": 55,
+    "return_price": "15000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 160,
+  "fields": {
+    "slug": "gul-buketi-fresh",
+    "name": "Gul buketi Fresh",
+    "category": 31,
+    "price": "189000",
+    "description": "Mavsumiy gullardan yig'ilgan buket, kraft qog'ozda. Toshkent bo'ylab yetkazib beriladi.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.516Z",
+    "stock": 20,
+    "return_price": "22000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 161,
+  "fields": {
+    "slug": "xushboy-sham-toplami",
+    "name": "Xushbo'y sham to'plami",
+    "category": 31,
+    "price": "109000",
+    "description": "Soya mumidan 3 ta sham: vanil, sitrus va o'rmon hidi. Har biri 25 soat yonadi.",
+    "is_bestseller": false,
+    "created_at": "2026-08-24T10:43:21.516Z",
+    "stock": 50,
+    "return_price": "13000"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 162,
+  "fields": {
+    "slug": "qol-soati-classic",
+    "name": "Qo'l soati Classic",
+    "category": 31,
+    "price": "459000",
+    "description": "Zanglamaydigan po'lat korpus, mineral shisha, 3ATM suvdan himoya. Sovg'a qutisi bilan.",
+    "is_bestseller": true,
+    "created_at": "2026-08-24T10:43:21.517Z",
+    "stock": 15,
+    "return_price": "52000"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 339,
+  "fields": {
+    "product": 128,
+    "image": "demo/products/odatlar-kuchi-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 340,
+  "fields": {
+    "product": 128,
+    "image": "demo/products/odatlar-kuchi-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 341,
+  "fields": {
+    "product": 129,
+    "image": "demo/products/otkan-kunlar-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 342,
+  "fields": {
+    "product": 129,
+    "image": "demo/products/otkan-kunlar-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 343,
+  "fields": {
+    "product": 130,
+    "image": "demo/products/biznes-kitoblari-toplami-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 344,
+  "fields": {
+    "product": 130,
+    "image": "demo/products/biznes-kitoblari-toplami-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 345,
+  "fields": {
+    "product": 131,
+    "image": "demo/products/bolalar-ertaklari-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 346,
+  "fields": {
+    "product": 131,
+    "image": "demo/products/bolalar-ertaklari-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 347,
+  "fields": {
+    "product": 132,
+    "image": "demo/products/charm-muqovali-kundalik-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 348,
+  "fields": {
+    "product": 132,
+    "image": "demo/products/charm-muqovali-kundalik-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 349,
+  "fields": {
+    "product": 133,
+    "image": "demo/products/simsiz-quloqchin-tws-9-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 350,
+  "fields": {
+    "product": 133,
+    "image": "demo/products/simsiz-quloqchin-tws-9-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 351,
+  "fields": {
+    "product": 134,
+    "image": "demo/products/power-bank-20000mah-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 352,
+  "fields": {
+    "product": 134,
+    "image": "demo/products/power-bank-20000mah-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 353,
+  "fields": {
+    "product": 135,
+    "image": "demo/products/smart-watch-s8-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 354,
+  "fields": {
+    "product": 135,
+    "image": "demo/products/smart-watch-s8-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 355,
+  "fields": {
+    "product": 136,
+    "image": "demo/products/bluetooth-kolonka-boom-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 356,
+  "fields": {
+    "product": 136,
+    "image": "demo/products/bluetooth-kolonka-boom-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 357,
+  "fields": {
+    "product": 137,
+    "image": "demo/products/simsiz-sichqoncha-silent-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 358,
+  "fields": {
+    "product": 137,
+    "image": "demo/products/simsiz-sichqoncha-silent-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 359,
+  "fields": {
+    "product": 138,
+    "image": "demo/products/yoga-gilamchasi-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 360,
+  "fields": {
+    "product": 138,
+    "image": "demo/products/yoga-gilamchasi-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 361,
+  "fields": {
+    "product": 139,
+    "image": "demo/products/gantel-toplami-2x5kg-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 362,
+  "fields": {
+    "product": 139,
+    "image": "demo/products/gantel-toplami-2x5kg-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 363,
+  "fields": {
+    "product": 140,
+    "image": "demo/products/sport-sumkasi-active-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 364,
+  "fields": {
+    "product": 140,
+    "image": "demo/products/sport-sumkasi-active-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 365,
+  "fields": {
+    "product": 141,
+    "image": "demo/products/sport-suv-shishasi-1l-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 366,
+  "fields": {
+    "product": 141,
+    "image": "demo/products/sport-suv-shishasi-1l-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 367,
+  "fields": {
+    "product": 142,
+    "image": "demo/products/sakrash-arqoni-pro-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 368,
+  "fields": {
+    "product": 142,
+    "image": "demo/products/sakrash-arqoni-pro-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 369,
+  "fields": {
+    "product": 143,
+    "image": "demo/products/termos-12l-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 370,
+  "fields": {
+    "product": 143,
+    "image": "demo/products/termos-12l-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 371,
+  "fields": {
+    "product": 144,
+    "image": "demo/products/aromadiffuzor-mist-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 372,
+  "fields": {
+    "product": 144,
+    "image": "demo/products/aromadiffuzor-mist-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 373,
+  "fields": {
+    "product": 145,
+    "image": "demo/products/choy-servizi-12-predmet-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 374,
+  "fields": {
+    "product": 145,
+    "image": "demo/products/choy-servizi-12-predmet-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 375,
+  "fields": {
+    "product": 146,
+    "image": "demo/products/oshxona-pichoqlari-toplami-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 376,
+  "fields": {
+    "product": 146,
+    "image": "demo/products/oshxona-pichoqlari-toplami-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 377,
+  "fields": {
+    "product": 147,
+    "image": "demo/products/stol-chirogi-led-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 378,
+  "fields": {
+    "product": 147,
+    "image": "demo/products/stol-chirogi-led-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 379,
+  "fields": {
+    "product": 148,
+    "image": "demo/products/yuz-uchun-namlantiruvchi-krem-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 380,
+  "fields": {
+    "product": 149,
+    "image": "demo/products/parfyum-nova-nuit-50ml-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 381,
+  "fields": {
+    "product": 149,
+    "image": "demo/products/parfyum-nova-nuit-50ml-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 382,
+  "fields": {
+    "product": 150,
+    "image": "demo/products/soch-quritgich-ion-2200w-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 383,
+  "fields": {
+    "product": 150,
+    "image": "demo/products/soch-quritgich-ion-2200w-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 384,
+  "fields": {
+    "product": 151,
+    "image": "demo/products/boyanish-toplami-basic-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 385,
+  "fields": {
+    "product": 151,
+    "image": "demo/products/boyanish-toplami-basic-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 386,
+  "fields": {
+    "product": 152,
+    "image": "demo/products/tabiiy-sovun-toplami-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 387,
+  "fields": {
+    "product": 152,
+    "image": "demo/products/tabiiy-sovun-toplami-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 388,
+  "fields": {
+    "product": 153,
+    "image": "demo/products/konstruktor-350-detal-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 389,
+  "fields": {
+    "product": 153,
+    "image": "demo/products/konstruktor-350-detal-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 390,
+  "fields": {
+    "product": 154,
+    "image": "demo/products/yumshoq-oyinchoq-ayiq-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 391,
+  "fields": {
+    "product": 154,
+    "image": "demo/products/yumshoq-oyinchoq-ayiq-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 392,
+  "fields": {
+    "product": 155,
+    "image": "demo/products/rangli-qalamlar-36-ta-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 393,
+  "fields": {
+    "product": 155,
+    "image": "demo/products/rangli-qalamlar-36-ta-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 394,
+  "fields": {
+    "product": 156,
+    "image": "demo/products/puzzle-500-detal-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 395,
+  "fields": {
+    "product": 156,
+    "image": "demo/products/puzzle-500-detal-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 396,
+  "fields": {
+    "product": 157,
+    "image": "demo/products/maktab-ryukzagi-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 397,
+  "fields": {
+    "product": 157,
+    "image": "demo/products/maktab-ryukzagi-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 398,
+  "fields": {
+    "product": 158,
+    "image": "demo/products/sovga-toplami-premium-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 399,
+  "fields": {
+    "product": 158,
+    "image": "demo/products/sovga-toplami-premium-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 400,
+  "fields": {
+    "product": 159,
+    "image": "demo/products/shokolad-toplami-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 401,
+  "fields": {
+    "product": 159,
+    "image": "demo/products/shokolad-toplami-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 402,
+  "fields": {
+    "product": 160,
+    "image": "demo/products/gul-buketi-fresh-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 403,
+  "fields": {
+    "product": 160,
+    "image": "demo/products/gul-buketi-fresh-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 404,
+  "fields": {
+    "product": 161,
+    "image": "demo/products/xushboy-sham-toplami-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 405,
+  "fields": {
+    "product": 161,
+    "image": "demo/products/xushboy-sham-toplami-2.jpg",
+    "order": 1
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 406,
+  "fields": {
+    "product": 162,
+    "image": "demo/products/qol-soati-classic-1.jpg",
+    "order": 0
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 407,
+  "fields": {
+    "product": 162,
+    "image": "demo/products/qol-soati-classic-2.jpg",
+    "order": 1
+  }
+}
+]
