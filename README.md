@@ -74,7 +74,7 @@ lifecycle, the ORM and the template layer carry the weight.
 ## Quick start
 
 ```bash
-git clone https://github.com/uzbillionaire/Nova.git
+git clone https://github.com/sanjarbek-ashurboyev/Nova.git
 cd Nova
 
 python -m venv .venv
