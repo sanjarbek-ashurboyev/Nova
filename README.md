@@ -1,5 +1,7 @@
 # Nova
 
+[![Tests](https://github.com/sanjarbek-ashurboyev/Nova/actions/workflows/tests.yml/badge.svg)](https://github.com/sanjarbek-ashurboyev/Nova/actions/workflows/tests.yml)
+
 A multi-role e-commerce and dropshipping platform built with Django, where independent
 sellers promote products through personal referral links, operators process the incoming
 orders, and drivers deliver them — each role with its own dedicated workspace.
