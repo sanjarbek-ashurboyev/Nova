@@ -286,46 +286,62 @@
                     <div class="op-field">
                         <label>Buyurtma holati</label>
                         <div class="op-status-grid">
+                            {% if 'packaging' in allowed_statuses %}
                             <label class="op-status-opt s-packaging">
                                 <input type="radio" name="status" value="packaging"
                                        {% if form.status.value == "packaging" %}checked{% endif %}>
                                 <span>Qadoqlash</span>
                             </label>
+                            {% endif %}
+                            {% if 'shipping' in allowed_statuses %}
                             <label class="op-status-opt s-shipping">
                                 <input type="radio" name="status" value="shipping"
                                        {% if form.status.value == "shipping" %}checked{% endif %}>
                                 <span>Yetkazish</span>
                             </label>
+                            {% endif %}
+                            {% if 'delivered' in allowed_statuses %}
                             <label class="op-status-opt s-delivered">
                                 <input type="radio" name="status" value="delivered"
                                        {% if form.status.value == "delivered" %}checked{% endif %}>
                                 <span>Yetkazildi</span>
                             </label>
+                            {% endif %}
+                            {% if 'pickup_later' in allowed_statuses %}
                             <label class="op-status-opt s-pickup_later">
                                 <input type="radio" name="status" value="pickup_later"
                                        {% if form.status.value == "pickup_later" %}checked{% endif %}>
                                 <span>Keyin oladi</span>
                             </label>
+                            {% endif %}
+                            {% if 'hold' in allowed_statuses %}
                             <label class="op-status-opt s-hold">
                                 <input type="radio" name="status" value="hold"
                                        {% if form.status.value == "hold" %}checked{% endif %}>
                                 <span>Hold</span>
                             </label>
+                            {% endif %}
+                            {% if 'returned' in allowed_statuses %}
                             <label class="op-status-opt s-returned">
                                 <input type="radio" name="status" value="returned"
                                        {% if form.status.value == "returned" %}checked{% endif %}>
                                 <span>Qaytdi</span>
                             </label>
+                            {% endif %}
+                            {% if 'cancelled' in allowed_statuses %}
                             <label class="op-status-opt s-cancelled">
                                 <input type="radio" name="status" value="cancelled"
                                        {% if form.status.value == "cancelled" %}checked{% endif %}>
                                 <span>Bekor</span>
                             </label>
+                            {% endif %}
+                            {% if 'archive' in allowed_statuses %}
                             <label class="op-status-opt s-archive">
                                 <input type="radio" name="status" value="archive"
                                        {% if form.status.value == "archive" %}checked{% endif %}>
                                 <span>Arxiv</span>
                             </label>
+                            {% endif %}
                         </div>
                         <p class="op-hint">Holat Order.status maydoniga yoziladi.</p>
                     </div>

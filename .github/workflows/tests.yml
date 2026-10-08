@@ -18,6 +18,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+      DJANGO_DEBUG: "1"
 
     steps:
       - uses: actions/checkout@v5

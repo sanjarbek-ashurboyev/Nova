@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import transaction
-from django.db.models import F, Q
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
@@ -9,9 +9,9 @@ from django.views.generic import DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
 
 from accounts.models import Region, User
-from catalog.models import Product
 from operator_app.forms import ChangeOrderForm, OrderDetailForm
 from orders.models import Order, Survey
+from orders.services import OrderChangeError, allowed_statuses, apply_operator_change
 
 
 class OperatorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -124,6 +124,12 @@ class OperatorOrderUpdateView(OperatorRequiredMixin, UpdateView):
 
     @transaction.atomic
     def form_valid(self, form):
+        try:
+            apply_operator_change(self.object.pk, status=form.cleaned_data['status'],
+                                  quantity=self.object.quantity)
+        except OrderChangeError as error:
+            messages.error(self.request, error.message)
+            return redirect(self.success_url)
         response = super().form_valid(form)
         Survey.objects.update_or_create(
             order=self.object,
@@ -133,6 +139,12 @@ class OperatorOrderUpdateView(OperatorRequiredMixin, UpdateView):
             },
         )
         return response
+
+    def form_invalid(self, form):
+        # This view only receives the quick-status modal; there is no page to re-render.
+        for errors in form.errors.values():
+            messages.error(self.request, errors[0])
+        return redirect(self.success_url)
 
 
 class OperatorOrderDetailView(OperatorRequiredMixin, OperatorCountsMixin, FormMixin, DetailView):
@@ -161,16 +173,12 @@ class OperatorOrderDetailView(OperatorRequiredMixin, OperatorCountsMixin, FormMi
 
     @transaction.atomic
     def form_valid(self, form):
-        delta = form.cleaned_data['quantity'] - (form.initial.get('quantity') or 0)
-        if delta > 0:
-            claimed = (Product.objects
-                       .filter(pk=self.object.product_id, stock__gte=delta)
-                       .update(stock=F('stock') - delta))
-            if not claimed:
-                form.add_error('quantity', "Omborda yetarli mahsulot qolmadi.")
-                return self.form_invalid(form)
-        elif delta < 0:
-            Product.objects.filter(pk=self.object.product_id).update(stock=F('stock') - delta)
+        try:
+            apply_operator_change(self.object.pk, status=form.cleaned_data['status'],
+                                  quantity=form.cleaned_data['quantity'])
+        except OrderChangeError as error:
+            form.add_error(error.field, error.message)
+            return self.form_invalid(form)
 
         self.object = form.save()
         Survey.objects.update_or_create(
@@ -185,6 +193,9 @@ class OperatorOrderDetailView(OperatorRequiredMixin, OperatorCountsMixin, FormMi
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['regions'] = Region.objects.all()
+        # Read from the database: after a rejected submit the form's instance holds the
+        # submitted status, not the order's real one.
+        data['allowed_statuses'] = allowed_statuses(Order.objects.get(pk=self.object.pk))
         data['districts_json'] = {
             str(region.id): [[d.id, d.title] for d in region.districts.all()]
             for region in Region.objects.prefetch_related('districts')

@@ -81,6 +81,7 @@ python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
+export DJANGO_DEBUG=1              # Windows: set DJANGO_DEBUG=1
 python manage.py migrate
 python manage.py seed_demo         # optional but recommended
 python manage.py runserver
@@ -146,6 +147,26 @@ The database decides the winner; a return value of `0` means someone else got th
 first, and the operator is told so. "Take next" wraps the same primitive in a bounded
 retry loop rather than locking the table.
 
+### Order status rules and stock
+
+Stock is taken when an order is placed. `orders/services.py` decides where an operator
+may move an order next, and puts the items back exactly once when it is cancelled or
+returned:
+
+| From | Operator may move it to |
+|---|---|
+| New | Packaging, Hold, Pickup later, Cancelled |
+| Hold | Packaging, Pickup later, Cancelled |
+| Pickup later | Packaging, Hold, Delivered (collected in person), Cancelled |
+| Packaging | Shipping, Hold, Cancelled |
+| Shipping | Returned. Only the driver marks it delivered |
+| Delivered | Returned, Archive |
+| Returned, Cancelled | Archive |
+
+The order row is locked while the change is checked, so a double submit cannot return
+the stock twice. The quantity can change only while the items are still in the
+warehouse (up to Packaging). The order page offers only the statuses the order can move to.
+
 ### Balance ledger on payouts
 
 A seller's balance has to stay correct when a payout is approved, reverted, or edited
@@ -195,24 +216,26 @@ static/         CSS, JS and brand assets
 ## Tests
 
 ```bash
-python manage.py test
+DJANGO_DEBUG=1 python manage.py test   # or: make test
 ```
 
-46 tests covering phone normalisation and masking, API-key generation, slug behaviour,
-thread discount rules, order totals, the full payment-ledger state machine, and
-role-based access control for every operator and driver route.
+59 tests covering phone normalisation and masking, API-key generation, slug behaviour,
+thread discount rules, order totals, the full payment-ledger state machine,
+role-based access control for every operator and driver route, and the order status
+rules with the stock each change moves.
 
 ---
 
 ## Configuration
 
 All settings come from environment variables — see [`.env.example`](.env.example).
-Nothing is required for local development; `DEBUG` defaults to on and a git-ignored
-`.secret_key` file is generated on first run.
+For local development set `DJANGO_DEBUG=1` (the `make` targets do); a git-ignored
+`.secret_key` file is then generated on first run. `DEBUG` is off by default, so a server
+started without configuration refuses to run instead of exposing tracebacks.
 
 | Variable | Default | Notes |
 |---|---|---|
-| `DJANGO_DEBUG` | `1` | Set to `0` in production |
+| `DJANGO_DEBUG` | `0` | Set to `1` for local development |
 | `DJANGO_SECRET_KEY` | auto (dev only) | **Required** when `DEBUG=0` |
 | `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1` | Comma-separated |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | — | Comma-separated, include the scheme |
@@ -223,10 +246,6 @@ secure cookies, SSL redirect, content-type nosniff and a `same-origin` referrer 
 
 ## Known limitations
 
-- **Cancelling or returning an order does not put the stock back.** Stock only changes when
-  an order is placed or its quantity is edited.
-- **Order status changes are not restricted.** An operator can move an order to any status,
-  including "delivered", without it going through a driver.
 - **Order totals use the product's current price,** not the price when the order was placed
   ([#1](https://github.com/sanjarbek-ashurboyev/Nova/issues/1)).
 - **Payout requests store the full card number.** The interface shows only the last four
