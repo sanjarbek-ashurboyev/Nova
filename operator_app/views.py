@@ -5,10 +5,10 @@ from django.db.models import F, Q
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
 
-from accounts.models import User, Region
+from accounts.models import Region, User
 from catalog.models import Product
 from operator_app.forms import ChangeOrderForm, OrderDetailForm
 from orders.models import Order, Survey

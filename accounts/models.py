@@ -1,8 +1,16 @@
 import secrets
 
-from django.contrib.auth.models import PermissionsMixin, AbstractUser, UserManager
-from django.db.models import CharField, Model, ForeignKey, CASCADE, BigIntegerField, TextField, SET_NULL, \
-    DecimalField
+from django.contrib.auth.models import AbstractUser, PermissionsMixin, UserManager
+from django.db.models import (
+    CASCADE,
+    SET_NULL,
+    BigIntegerField,
+    CharField,
+    DecimalField,
+    ForeignKey,
+    Model,
+    TextField,
+)
 from django.db.models.enums import TextChoices
 
 from accounts.phone import mask_phone

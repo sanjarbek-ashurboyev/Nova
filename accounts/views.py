@@ -1,15 +1,25 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, update_session_auth_hash, REDIRECT_FIELD_NAME
+from django.contrib.auth import (
+    REDIRECT_FIELD_NAME,
+    authenticate,
+    login,
+    update_session_auth_hash,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
-from django.contrib.auth.views import LogoutView as BaseLogoutView
 
-from accounts.forms import LoginForm, RegisterForm, UserUpdateModelForm, UserPasswordUpdateForm
+from accounts.forms import (
+    LoginForm,
+    RegisterForm,
+    UserPasswordUpdateForm,
+    UserUpdateModelForm,
+)
 from accounts.models import Region, User
 
 

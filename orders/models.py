@@ -1,9 +1,24 @@
-from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
+from django.core.validators import FileExtensionValidator
 from django.db import models, transaction
-from django.db.models import F, FileField
-from django.db.models import Model, ForeignKey, OneToOneField, PROTECT, SET_NULL, TextChoices, CASCADE
-from django.db.models.fields import CharField, DateTimeField, PositiveSmallIntegerField, DecimalField, TextField
+from django.db.models import (
+    CASCADE,
+    PROTECT,
+    SET_NULL,
+    F,
+    FileField,
+    ForeignKey,
+    Model,
+    OneToOneField,
+    TextChoices,
+)
+from django.db.models.fields import (
+    CharField,
+    DateTimeField,
+    DecimalField,
+    PositiveSmallIntegerField,
+    TextField,
+)
 
 from accounts.phone import phone_validator
 
@@ -113,7 +128,7 @@ class Payment(Model):
             if delta:
                 User = get_user_model()
                 User.objects.filter(pk=self.user_id).update(balance=F('balance') + delta)
-                if 'user' in getattr(self, '_state').fields_cache:
+                if 'user' in self._state.fields_cache:
                     self.user.refresh_from_db(fields=['balance'])
 
         self._loaded_status = self.status
