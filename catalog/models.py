@@ -1,6 +1,18 @@
 from django.core.exceptions import ValidationError
-from django.db.models import Model, CharField, SlugField, PositiveIntegerField, CASCADE, ForeignKey, DecimalField, \
-    TextField, BooleanField, SmallIntegerField, ImageField, DateTimeField
+from django.db.models import (
+    CASCADE,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    DecimalField,
+    ForeignKey,
+    ImageField,
+    Model,
+    PositiveIntegerField,
+    SlugField,
+    SmallIntegerField,
+    TextField,
+)
 from django.utils.text import slugify
 
 

@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, PasswordInput, Form
+from django.forms import CharField, Form, ModelForm, PasswordInput
 
 from accounts.phone import normalize_phone
 

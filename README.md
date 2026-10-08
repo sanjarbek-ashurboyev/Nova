@@ -221,6 +221,18 @@ Nothing is required for local development; `DEBUG` defaults to on and a git-igno
 With `DEBUG=0` the app refuses to start without a secret key, and switches on HSTS,
 secure cookies, SSL redirect, content-type nosniff and a `same-origin` referrer policy.
 
+## Known limitations
+
+- **Cancelling or returning an order does not put the stock back.** Stock only changes when
+  an order is placed or its quantity is edited.
+- **Order status changes are not restricted.** An operator can move an order to any status,
+  including "delivered", without it going through a driver.
+- **Order totals use the product's current price,** not the price when the order was placed
+  ([#1](https://github.com/sanjarbek-ashurboyev/Nova/issues/1)).
+- **Payout requests store the full card number.** The interface shows only the last four
+  digits, but the database keeps all sixteen.
+- **SQLite by default, with no Docker setup** ([#2](https://github.com/sanjarbek-ashurboyev/Nova/issues/2)).
+
 ---
 
 ## License

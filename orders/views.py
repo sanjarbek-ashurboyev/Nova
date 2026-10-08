@@ -5,16 +5,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.db.models import Count, DecimalField, ExpressionWrapper, F, Q, Sum, Value
 from django.db.models.functions import Coalesce
-from django.urls import reverse_lazy
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView, ListView
 
 from accounts.models import User
 from catalog.models import Thread
 from orders.forms import PaymentForm
-from orders.models import Payment, Order
+from orders.models import Order, Payment
 
 
 class PaymentRequestView(LoginRequiredMixin, FormView):
@@ -57,7 +57,7 @@ class PaymentReceiptDownloadView(LoginRequiredMixin, View):
         try:
             handle = payment.receipt.open('rb')
         except FileNotFoundError:
-            raise Http404("Chek fayli topilmadi")
+            raise Http404("Chek fayli topilmadi") from None
 
         extension = Path(payment.receipt.name).suffix
         filename = f"chek-{payment.pk}-{payment.created_at:%Y%m%d}{extension}"

@@ -4,7 +4,6 @@ from django.forms.models import ModelForm
 
 from orders.models import Order
 
-
 REQUIRED = {'required': "Bu maydon to'ldirilishi shart."}
 INVALID_CHOICE = {'invalid_choice': "Tanlangan qiymat noto'g'ri."}
 
