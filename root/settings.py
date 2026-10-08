@@ -20,7 +20,8 @@ def _dev_secret_key():
     return path.read_text().strip()
 
 
-DEBUG = _env_flag('DJANGO_DEBUG', '1')
+# Off unless asked for: a server started without configuration must not show tracebacks.
+DEBUG = _env_flag('DJANGO_DEBUG', '0')
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or ''
 if not SECRET_KEY:

@@ -1,5 +1,11 @@
+# DEBUG is off by default; every local target turns it on.
+DEV := DJANGO_DEBUG=1
+
+test:
+	$(DEV) python manage.py test
+
 mig:
-	python manage.py makemigrations
-	python manage.py migrate
+	$(DEV) python manage.py makemigrations
+	$(DEV) python manage.py migrate
 run:
-	python manage.py runserver
+	$(DEV) python manage.py runserver

@@ -81,6 +81,7 @@ python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
+export DJANGO_DEBUG=1              # Windows: set DJANGO_DEBUG=1
 python manage.py migrate
 python manage.py seed_demo         # optional but recommended
 python manage.py runserver
@@ -215,7 +216,7 @@ static/         CSS, JS and brand assets
 ## Tests
 
 ```bash
-python manage.py test
+DJANGO_DEBUG=1 python manage.py test   # or: make test
 ```
 
 59 tests covering phone normalisation and masking, API-key generation, slug behaviour,
@@ -228,12 +229,13 @@ rules with the stock each change moves.
 ## Configuration
 
 All settings come from environment variables — see [`.env.example`](.env.example).
-Nothing is required for local development; `DEBUG` defaults to on and a git-ignored
-`.secret_key` file is generated on first run.
+For local development set `DJANGO_DEBUG=1` (the `make` targets do); a git-ignored
+`.secret_key` file is then generated on first run. `DEBUG` is off by default, so a server
+started without configuration refuses to run instead of exposing tracebacks.
 
 | Variable | Default | Notes |
 |---|---|---|
-| `DJANGO_DEBUG` | `1` | Set to `0` in production |
+| `DJANGO_DEBUG` | `0` | Set to `1` for local development |
 | `DJANGO_SECRET_KEY` | auto (dev only) | **Required** when `DEBUG=0` |
 | `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1` | Comma-separated |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | — | Comma-separated, include the scheme |
